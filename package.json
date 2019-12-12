@@ -13,6 +13,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "lodash": "^4.17.15",
+    "lodash.uniqueid": "^4.0.1",
     "normalize.css": "^8.0.1",
     "prop-types": "^15.6.0",
     "react": "^16.12.0",

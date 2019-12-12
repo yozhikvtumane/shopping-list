@@ -7,7 +7,7 @@ import Header from './Header'
 import NewItem from './NewItem'
 /* @Todo:
 	◘ Move header to standalone component
-	Make amount counter as a standalone component with plus-minus buttons (internal state)
+	• Make amount counter as a standalone component with plus-minus buttons stateless
 */
 
 /*
@@ -34,10 +34,12 @@ export const GlobalStyle = createGlobalStyle`
 
 	* {
 		box-sizing: border-box;
+		outline: none;
 	}
 
 	body {
 		font-family: 'Poppins', sans-serif;
+		background-color: #f0ebf8;
 		color: #333;
 	}
 
@@ -59,11 +61,15 @@ export const GlobalStyle = createGlobalStyle`
 
 /* Style for main app element */
 
+
+// border-top: 1px solid rgba(23, 162, 184, 0.3);
+// border-right: 1px solid rgba(23, 162, 184, 0.3);
+// border-left: 1px solid rgba(23, 162, 184, 0.3);
+
+
 const MainFrame = styled.div`
 	height: ${props => props.windowHeight}px;
-	border-top: 1px solid rgba(23, 162, 184, 0.3);
-	border-right: 1px solid rgba(23, 162, 184, 0.3);
-	border-left: 1px solid rgba(23, 162, 184, 0.3);
+	background-color: #fff;
 	border-top-left-radius: 4px;
 	border-top-right-radius: 4px;
 	box-shadow: rgba(0, 0, 0, 0.15) 0px 8px 16px 0px;
@@ -74,11 +80,13 @@ const MainFrame = styled.div`
 class ShoppingList extends Component {
 	constructor() {
 		super()
+		this.handleItemCreate = this.handleItemCreate.bind(this)
 		this.state = {
 			styling: {
 				windowWidth: window.innerWidth,
 				windowHeight: window.innerHeight
-			}
+			},
+			items: []
 		}
 		
 		console.log(this.state)
@@ -87,6 +95,11 @@ class ShoppingList extends Component {
 	// componentDidMount() {
 		
 	// }
+	handleItemCreate(item) {
+		this.setState({
+			items: [...this.state.items, item]
+		})
+	}
 	
 	render() {
 		return(
@@ -95,7 +108,7 @@ class ShoppingList extends Component {
 				<Header />
 				<MainFrame windowHeight={this.state.styling.windowHeight}>
 					{/* NewItem type: input */}
-					<NewItem />
+					<NewItem onItemCreate={this.handleItemCreate}/>
 					{/* ListItem */}
 					<div>
 						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti praesentium repellendus obcaecati fugiat? Architecto, culpa. Nisi voluptatum excepturi alias commodi blanditiis tempora ullam, quidem natus aliquid, saepe optio in quis?</p>

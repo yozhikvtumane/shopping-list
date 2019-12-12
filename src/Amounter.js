@@ -28,47 +28,37 @@ import styled from 'styled-components'
 
 // `
 
-class Amounter extends Component {
-	constructor(props) {
-		super(props)
-		console.log("constructor props", props)
-		this.amountPlus = this.amountPlus.bind(this)
-		this.amountMinus = this.amountMinus.bind(this)
-		this.handleAmountChange = this.handleAmountChange.bind(this)
-		
-		this.state = {
-			amountValue: 1
-		}	
-	}
+const StyledAmountInput = styled.input.attrs(props => ({
+	type: "number",
+	value: props.value,
+	className: "customNumberInput", /* This classname is used in global styles to remove au-down arrows in input[type=number]*/
 	
-	amountPlus() {
-		this.setState({
-			amountValue: this.state.amountValue + 1
-		})
-	}
-	
-	amountMinus() {
-		this.setState({
-			amountValue: this.state.amountValue - 1
-		})
-	}
-	
-	handleAmountChange() {
-		console.log("handleAmountChange change")
-		this.props.amountHandler(this.state.amountValue)
-	}
-	
-	render() {
-		return (
-			<Fragment>
-				
-				<Button iconBefore={<EditorAddIcon />} onClick={this.amountPlus}/>
-				{/* <StyledAmountNumber value={this.state.amountValue} onChange={this.handleAmountChange} /> */}
-				<input type="number"  value={this.state.amountValue} onChange={this.handleAmountChange} />
-				<Button iconBefore={ <EditorHorizontalRuleIcon/> } onClick={this.amountMinus} />
-			</Fragment>
-		)
-	}
-}
+}))`
+	width: 36px;
+	margin-right: 4px;
+	margin-left: 4px;
+	text-align: center;
+	font-size: 24px;
+	font-weight: 300;
+	border: none;
+	border-bottom: 1px solid #f0ebf8;
+`
 
-export default Amounter
+export default function(props) {
+	const amountPlus = () => {
+		return props.amountHandler(props.amountValue + 1)
+	}
+	
+	const amountMinus = () => {
+		if (props.amountValue > 0) return props.amountHandler(props.amountValue - 1)
+		return
+	}
+	
+	return (
+		<Fragment>
+			<Button iconBefore={<EditorAddIcon />} onClick={amountPlus}/>
+			<StyledAmountInput type="number"  value={props.amountValue} />
+			<Button iconBefore={ <EditorHorizontalRuleIcon/> } onClick={amountMinus} />
+		</Fragment>
+	)
+}
