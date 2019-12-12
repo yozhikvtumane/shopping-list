@@ -5,6 +5,7 @@ import { Checkbox } from '@atlaskit/checkbox'
 import merge from 'lodash.merge'
 import Header from './Header'
 import NewItem from './NewItem'
+import SingleItem from './SingleItem'
 /* @Todo:
 	◘ Move header to standalone component
 	• Make amount counter as a standalone component with plus-minus buttons stateless
@@ -81,12 +82,19 @@ class ShoppingList extends Component {
 	constructor() {
 		super()
 		this.handleItemCreate = this.handleItemCreate.bind(this)
+		this.renderItems = this.renderItems.bind(this)
+		this.recieveAmount = this.recieveAmount.bind(this)
+
 		this.state = {
+			
 			styling: {
 				windowWidth: window.innerWidth,
 				windowHeight: window.innerHeight
 			},
-			items: []
+			
+			items: [],
+			saved: false,
+
 		}
 		
 		console.log(this.state)
@@ -100,7 +108,36 @@ class ShoppingList extends Component {
 			items: [...this.state.items, item]
 		})
 	}
-	
+
+	recieveAmount(id, num) {
+
+		// let itemToChange = this.state.items.filter()
+		console.log("recieveAMount", id, num)
+		let listItems = [...this.state.items].map(item => {
+			if (id === item.id) {
+				item.amount = num
+			}
+			return item
+		})
+		console.log("listItems", listItems)
+		this.setState( (state, props) => {
+			console.log("set state callback", state, props, id, num)
+		})
+	}
+
+	renderItems() {
+		let listItems = [...this.state.items]
+
+		let renderedItems = listItems.map(item => {
+			console.log("this.recieveAmount", this.recieveAmount)
+			return (
+			<SingleItem id={item.id} amountValue={item.amount} textValue={item.textValue} amountHandler={this.recieveAmount}/>
+		)})
+
+		return renderedItems
+	}
+
+
 	render() {
 		return(
 			<Fragment>
@@ -110,6 +147,7 @@ class ShoppingList extends Component {
 					{/* NewItem type: input */}
 					<NewItem onItemCreate={this.handleItemCreate}/>
 					{/* ListItem */}
+					{this.renderItems()}
 					<div>
 						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti praesentium repellendus obcaecati fugiat? Architecto, culpa. Nisi voluptatum excepturi alias commodi blanditiis tempora ullam, quidem natus aliquid, saepe optio in quis?</p>
 						<Checkbox theme={customTheme} />

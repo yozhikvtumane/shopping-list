@@ -21,15 +21,21 @@ const customTheme = ((current, props) => {
 class SingleItem extends Component {
 	constructor(props) {
 		super(props)
+		this.amountHandler = this.amountHandler.bind(this)
 	}
 	
+	amountHandler() {
+		console.log("amountHandler() SingleItem", this.props.amountValue)
+		this.props.amountHandler(this.props.id, this.props.amountValue)
+	}
+
 	render() {
 		return(
 			<div>
 				<Checkbox theme={customTheme} />
 				<span>{this.props.textValue}</span>
 				
-				<Amounter />
+				<Amounter amountValue={this.props.amountValue} amountHandler={this.amountHandler}/>
 				<div className="controlsWrapper">
 					<span>del icon</span>
 				</div>

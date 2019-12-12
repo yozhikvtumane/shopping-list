@@ -46,6 +46,7 @@ const StyledAmountInput = styled.input.attrs(props => ({
 
 export default function(props) {
 	const amountPlus = () => {
+		console.log("props.amountHandler", props.amountHandler)
 		return props.amountHandler(props.amountValue + 1)
 	}
 	

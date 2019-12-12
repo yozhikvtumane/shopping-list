@@ -56,7 +56,8 @@ class NewItem extends Component {
 		this.state = {
 				id: uniqueid('listItem_'),			
 				amount: 1,
-				textValue: ""
+				textValue: "",
+				done: false
 		}
 		
 		console.dir(this.state)
