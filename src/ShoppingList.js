@@ -120,8 +120,9 @@ class ShoppingList extends Component {
 			return item
 		})
 		console.log("listItems", listItems)
-		this.setState( (state, props) => {
-			console.log("set state callback", state, props, id, num)
+		this.setState( (state) => {
+			// console.log("set state callback", state, props, id, num)
+			return { items : [...listItems] }
 		})
 	}
 

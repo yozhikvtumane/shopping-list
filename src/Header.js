@@ -1,3 +1,7 @@
+/*
+	Header component - wrapper for app's title and save button component
+*/
+
 import React, { Component, Fragment } from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
 import SaveButton from './SaveButton'

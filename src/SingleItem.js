@@ -24,9 +24,10 @@ class SingleItem extends Component {
 		this.amountHandler = this.amountHandler.bind(this)
 	}
 	
-	amountHandler() {
+	amountHandler(newAmount) {
+		// console.log("e", e)
 		console.log("amountHandler() SingleItem", this.props.amountValue)
-		this.props.amountHandler(this.props.id, this.props.amountValue)
+		this.props.amountHandler(this.props.id, newAmount)
 	}
 
 	render() {
