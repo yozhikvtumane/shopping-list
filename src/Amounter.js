@@ -42,6 +42,7 @@ const StyledAmountInput = styled.input.attrs(props => ({
 	font-weight: 300;
 	border: none;
 	border-bottom: 1px solid #f0ebf8;
+	border-radius: 3px;
 `
 
 export default function(props) {

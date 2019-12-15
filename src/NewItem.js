@@ -13,13 +13,16 @@ import uniqueid from 'lodash.uniqueid'
 
 const StyledFormWrapper = styled.div`
 	width: 100%;
+	margin-bottom: 2px;
 	padding: 1em 1.2em;
+	box-shadow: 0px 2px 2px 0px #efefef;
 `
 
 const StyledSubmitButton = styled(Button).attrs( props => ({
 	type: "submit"
 }))`
 	margin-left: auto;
+	background-color: #333;
 `
 const StyledForm = styled.form.attrs(props => ({
 	onSubmit: props.onSubmit,
@@ -54,7 +57,7 @@ class NewItem extends Component {
 		this.handleSubmit = this.handleSubmit.bind(this)
 		
 		this.state = {
-				id: uniqueid('listItem_'),			
+				id: uniqueid('listItem_'),
 				amount: 1,
 				textValue: "",
 				done: false
@@ -64,8 +67,8 @@ class NewItem extends Component {
 	}
 	
 	recieveAmount(num) {
-		this.setState({
-			amount: num
+		this.setState( () => {
+			return {amount: num}
 		})
 	}
 	

@@ -1,32 +1,17 @@
 import React, { Component, Fragment } from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
 
-import { Checkbox } from '@atlaskit/checkbox'
-import merge from 'lodash.merge'
 import Header from './Header'
 import NewItem from './NewItem'
 import SingleItem from './SingleItem'
 /* @Todo:
-	◘ Move header to standalone component
+	• Move header to standalone component
 	• Make amount counter as a standalone component with plus-minus buttons stateless
 */
 
 /*
 	Styling
 */
-
-/* Custom theme for checkbox*/
-
-const newThemeTokens = {
-	icon: {
-		size: 'large'
-	}
-}
-
-const customTheme = ((current, props) => {
-	const themeTokens = current(props)
-	return merge({}, themeTokens, newThemeTokens)
-})
 
 /* Global styles for body */
 
@@ -60,14 +45,6 @@ export const GlobalStyle = createGlobalStyle`
 	}
 `
 
-/* Style for main app element */
-
-
-// border-top: 1px solid rgba(23, 162, 184, 0.3);
-// border-right: 1px solid rgba(23, 162, 184, 0.3);
-// border-left: 1px solid rgba(23, 162, 184, 0.3);
-
-
 const MainFrame = styled.div`
 	height: ${props => props.windowHeight}px;
 	background-color: #fff;
@@ -84,6 +61,7 @@ class ShoppingList extends Component {
 		this.handleItemCreate = this.handleItemCreate.bind(this)
 		this.renderItems = this.renderItems.bind(this)
 		this.recieveAmount = this.recieveAmount.bind(this)
+		this.doneHandler = this.doneHandler.bind(this)
 
 		this.state = {
 			
@@ -99,45 +77,61 @@ class ShoppingList extends Component {
 		
 		console.log(this.state)
 	}
-	
-	// componentDidMount() {
-		
-	// }
+
 	handleItemCreate(item) {
-		this.setState({
-			items: [...this.state.items, item]
+		this.setState( () => {
+			return { items: [...this.state.items, item] }
 		})
 	}
 
 	recieveAmount(id, num) {
 
-		// let itemToChange = this.state.items.filter()
-		console.log("recieveAMount", id, num)
 		let listItems = [...this.state.items].map(item => {
 			if (id === item.id) {
 				item.amount = num
 			}
 			return item
 		})
-		console.log("listItems", listItems)
+		
 		this.setState( (state) => {
-			// console.log("set state callback", state, props, id, num)
 			return { items : [...listItems] }
 		})
 	}
-
+	
+	doneHandler(id, doneState) {
+		let listItems = [...this.state.items].map(item => {
+			if (id === item.id) {
+				item.done = doneState
+			}
+			return item
+		})
+		
+		this.setState( (state) => {
+			return { items : [...listItems] }
+		})
+	}
+	
 	renderItems() {
 		let listItems = [...this.state.items]
 
-		let renderedItems = listItems.map(item => {
+		let renderedItems = listItems.map( (item, i) => {
 			console.log("this.recieveAmount", this.recieveAmount)
+			
 			return (
-			<SingleItem id={item.id} amountValue={item.amount} textValue={item.textValue} amountHandler={this.recieveAmount}/>
-		)})
+				<SingleItem
+					id={item.id}
+					amountValue={item.amount}
+					textValue={item.textValue}
+					onDone={this.doneHandler}
+					done={item.done}
+					amountHandler={this.recieveAmount}
+					bgcGrey={i % 2 === 0 ? "grey" : "white"}
+				/>
+			)
+		})
 
 		return renderedItems
 	}
-
 
 	render() {
 		return(
@@ -145,14 +139,8 @@ class ShoppingList extends Component {
 				<GlobalStyle />
 				<Header />
 				<MainFrame windowHeight={this.state.styling.windowHeight}>
-					{/* NewItem type: input */}
 					<NewItem onItemCreate={this.handleItemCreate}/>
-					{/* ListItem */}
 					{this.renderItems()}
-					<div>
-						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti praesentium repellendus obcaecati fugiat? Architecto, culpa. Nisi voluptatum excepturi alias commodi blanditiis tempora ullam, quidem natus aliquid, saepe optio in quis?</p>
-						<Checkbox theme={customTheme} />
-					</div>
 				</MainFrame>
 			</Fragment>
 		)
