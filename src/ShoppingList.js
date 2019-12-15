@@ -7,6 +7,13 @@ import SingleItem from './SingleItem'
 /* @Todo:
 	• Move header to standalone component
 	• Make amount counter as a standalone component with plus-minus buttons stateless
+	• Item Delete handler
+	• ThemedButton - move buttons to ThemedButton component, render depending on props
+	• ThemedCheckBox - move checkbox  to ThemedCheckbox component, render icon size dep. on props.
+	◘ Disable Amounter on item.done === true
+	◘ Move all styled-components code to StyledComponents component, import where necessery
+	◘ Localstorage handler
+	◘ Server saving handler
 */
 
 /*
@@ -15,7 +22,7 @@ import SingleItem from './SingleItem'
 
 /* Global styles for body */
 
-export const GlobalStyle = createGlobalStyle`
+const GlobalStyle = createGlobalStyle`
 	@import url('https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap');
 
 	* {
@@ -46,7 +53,7 @@ export const GlobalStyle = createGlobalStyle`
 `
 
 const MainFrame = styled.div`
-	height: ${props => props.windowHeight}px;
+	min-height: ${props => props.windowHeight}px;
 	background-color: #fff;
 	border-top-left-radius: 4px;
 	border-top-right-radius: 4px;
@@ -58,10 +65,12 @@ const MainFrame = styled.div`
 class ShoppingList extends Component {
 	constructor() {
 		super()
+		
 		this.handleItemCreate = this.handleItemCreate.bind(this)
 		this.renderItems = this.renderItems.bind(this)
 		this.recieveAmount = this.recieveAmount.bind(this)
 		this.doneHandler = this.doneHandler.bind(this)
+		this.deleteHandler = this.deleteHandler.bind(this)
 
 		this.state = {
 			
@@ -76,6 +85,20 @@ class ShoppingList extends Component {
 		}
 		
 		console.log(this.state)
+	}
+	
+	componentWillMount() {
+		if (localStorage.appData) {
+			this.setState(() => {
+				return JSON.parse(localStorage.appData)
+			})
+		} else {
+			return
+		}
+	}
+	
+	componentDidUpdate() {
+		localStorage.setItem('appData', JSON.stringify(this.state))
 	}
 
 	handleItemCreate(item) {
@@ -111,6 +134,16 @@ class ShoppingList extends Component {
 		})
 	}
 	
+	deleteHandler(id) {
+		let listItems = [...this.state.items].filter(item => {
+			return item.id !== id
+		})
+		
+		this.setState( (state) => {
+			return { items : [...listItems] }
+		})
+	}
+	
 	renderItems() {
 		let listItems = [...this.state.items]
 
@@ -123,6 +156,7 @@ class ShoppingList extends Component {
 					amountValue={item.amount}
 					textValue={item.textValue}
 					onDone={this.doneHandler}
+					onDelete={this.deleteHandler}
 					done={item.done}
 					amountHandler={this.recieveAmount}
 					bgcGrey={i % 2 === 0 ? "grey" : "white"}

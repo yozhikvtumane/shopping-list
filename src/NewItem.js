@@ -8,6 +8,7 @@ import React, { Component, Fragment } from 'react'
 import Button from '@atlaskit/button'
 import AddIcon from '@atlaskit/icon/glyph/add'
 import styled from 'styled-components'
+import ThemedButton from './ThemedButton'
 import Amounter from "./Amounter"
 import uniqueid from 'lodash.uniqueid'
 
@@ -21,7 +22,7 @@ const StyledFormWrapper = styled.div`
 const StyledSubmitButton = styled(Button).attrs( props => ({
 	type: "submit"
 }))`
-	margin-left: auto;
+	// margin-left: auto;
 	background-color: #333;
 `
 const StyledForm = styled.form.attrs(props => ({
@@ -100,7 +101,14 @@ class NewItem extends Component {
 				<StyledForm onSubmit={this.handleSubmit}>
 					<StyledTextInput value={this.state.textValue} onChange={this.handleTextChange}/>
 					<Amounter amountValue={this.state.amount} amountHandler={this.recieveAmount}/>
-					<StyledSubmitButton iconBefore={<AddIcon />}>Add Item</StyledSubmitButton>
+					<ThemedButton
+						type="submit"
+						iconBefore={<AddIcon />}
+						appearance="add"
+						isDisabled={this.state.textValue === "" ? true : false}
+					>
+						Add Item
+					</ThemedButton>
 				</StyledForm>
 			</StyledFormWrapper>
 		)
