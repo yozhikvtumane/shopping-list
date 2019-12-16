@@ -2,8 +2,8 @@
 	Header component - wrapper for app's title and save button component
 */
 
-import React, { Component, Fragment } from 'react'
-import styled, { createGlobalStyle } from 'styled-components'
+import React from 'react'
+import styled from 'styled-components'
 import SaveButton from './SaveButton'
 
 const StyledHeader = styled.header`
@@ -16,16 +16,11 @@ const StyledHeader = styled.header`
 	padding-top: 2em;
 `
 
-class Header extends Component {
-	
-	render() {
-		return (
-			<StyledHeader>
-				<h1>Shopping List</h1>
-				<SaveButton />
-			</StyledHeader>
-		)
-	}
+export default function(props) {
+	return (
+		<StyledHeader>
+			<h1>Shopping List</h1>
+			<SaveButton />
+		</StyledHeader>
+	)
 }
-
-export default Header

@@ -4,6 +4,8 @@ import styled, { createGlobalStyle } from 'styled-components'
 import Header from './Header'
 import NewItem from './NewItem'
 import SingleItem from './SingleItem'
+import Calls from './calls'
+import Loading from './Loading'
 /* @Todo:
 	• Move header to standalone component
 	• Make amount counter as a standalone component with plus-minus buttons stateless
@@ -81,27 +83,37 @@ class ShoppingList extends Component {
 			
 			items: [],
 			saved: false,
+			isLoaded: false,
+			isLoading: false,
+			error: null
 
 		}
 	}
-	
-	componentWillMount() {
-		if (localStorage.appData) {
-			this.setState(() => {
-				return JSON.parse(localStorage.appData)
-			})
-		} else {
-			return
+	// componentDidMount -> loaded true ? 
+	async componentDidMount() {
+		// if (localStorage.items) {
+		// 	return this.setState( () => {
+		// 		return { items: JSON.parse(localStorage.items) }
+		// 	})
+		// }
+		try {
+			this.setState({isLoading: true})
+			let result = await Calls.getShoppingList()
+			this.setState({ items: [...result], isLoading: false})
+		} catch(err) {
+			this.setState({ error: err})
 		}
+			
+		
 	}
 	
 	componentDidUpdate() {
-		localStorage.setItem('appData', JSON.stringify(this.state))
+		localStorage.setItem('items', JSON.stringify(this.state.items))
 	}
 
 	handleItemCreate(item) {
 		this.setState( () => {
-			return { items: [...this.state.items, item] }
+			return { items: [...this.state.items, item], saved: false }
 		})
 	}
 
@@ -115,7 +127,7 @@ class ShoppingList extends Component {
 		})
 		
 		this.setState( () => {
-			return { items : [...listItems] }
+			return { items : [...listItems], saved: false }
 		})
 	}
 	
@@ -128,7 +140,7 @@ class ShoppingList extends Component {
 		})
 		
 		this.setState( () => {
-			return { items : [...listItems] }
+			return { items : [...listItems], saved: false }
 		})
 	}
 	
@@ -138,7 +150,7 @@ class ShoppingList extends Component {
 		})
 		
 		this.setState( () => {
-			return { items : [...listItems] }
+			return { items : [...listItems], saved: false }
 		})
 	}
 	
@@ -164,16 +176,26 @@ class ShoppingList extends Component {
 	}
 
 	render() {
-		return(
-			<Fragment>
-				<GlobalStyle />
-				<Header />
-				<MainFrame windowHeight={this.state.styling.windowHeight}>
-					<NewItem onItemCreate={this.handleItemCreate}/>
-					{this.renderItems()}
-				</MainFrame>
-			</Fragment>
-		)
+		if (this.state.isLoading) {
+			return(
+				<Fragment>
+					<GlobalStyle />
+					<Header />
+					<Loading />
+				</Fragment>
+			)
+		} else {
+			return(
+				<Fragment>
+					<GlobalStyle />
+					<Header />
+					<MainFrame windowHeight={this.state.styling.windowHeight}>
+						<NewItem onItemCreate={this.handleItemCreate}/>
+						{this.renderItems()}
+					</MainFrame>
+				</Fragment>
+			)
+		}
 	}
 }
 
