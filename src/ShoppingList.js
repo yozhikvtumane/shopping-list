@@ -73,6 +73,7 @@ class ShoppingList extends Component {
 		this.recieveAmount = this.recieveAmount.bind(this)
 		this.doneHandler = this.doneHandler.bind(this)
 		this.deleteHandler = this.deleteHandler.bind(this)
+		this.handleSave = this.handleSave.bind(this)
 
 		this.state = {
 			
@@ -103,8 +104,8 @@ class ShoppingList extends Component {
 				this.setState({items: [...res], isLoading: false})	
 			})
 			.catch( err => {
-				console.log(err)
-				this.setState({error: err})	
+				console.dir(err)
+				this.setState({error: err.stack})	
 			})
 		
 		// try {
@@ -164,6 +165,11 @@ class ShoppingList extends Component {
 		})
 	}
 	
+	handleSave() {
+		Calls.uploadShoppingList(this.state.items)
+			.then(res => res).catch(err=>err)
+	}
+	
 	renderItems() {
 		let listItems = [...this.state.items]
 
@@ -198,7 +204,7 @@ class ShoppingList extends Component {
 			return(
 				<Fragment>
 					<GlobalStyle />
-					<Header />
+					<Header onSave={this.handleSave}/>
 					<MainFrame windowHeight={this.state.styling.windowHeight}>
 						<NewItem onItemCreate={this.handleItemCreate}/>
 						{this.renderItems()}

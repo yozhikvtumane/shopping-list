@@ -20,7 +20,7 @@ export default function(props) {
 	return (
 		<StyledHeader>
 			<h1>Shopping List</h1>
-			<SaveButton />
+			<SaveButton onClick={props.onSave}/>
 		</StyledHeader>
 	)
 }

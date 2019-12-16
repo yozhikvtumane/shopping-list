@@ -42,7 +42,7 @@ export default function(props) {
 	}
 	
 	return(
-		<StyledSingleItem bgcGrey={bgcGrey} >
+		<StyledSingleItem bgcGrey={bgcGrey} key={props.id}>
 			<ThemedCheckbox
 				onChange={handleCheck}
 				done={done}/>

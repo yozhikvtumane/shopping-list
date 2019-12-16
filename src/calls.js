@@ -26,21 +26,23 @@ let Calls = {
         );
     },
 
-    getShoppingList: function(dtoIn) {
+    getShoppingList(dtoIn) {
 		return new Promise( (resolve, reject) => {
 			resolve(Calls.call("get", this.getUri("shoppingList"), dtoIn))
 			reject("Error in Promise getShoppingList(), file: calls.js")
 		})
     },
-
+	
     async deleteShoppingItem(dtoIn) {
-        let commandUri = this.getUri("shoppingItem");
+		let commandUri = this.getUri("shoppingItem");
         return await Calls.call("delete", commandUri, dtoIn);
     },
-
-    async createShoppingItem(dtoIn) {
-        let commandUri = this.getUri("shoppingItem");
-        return await Calls.call("post", commandUri, dtoIn);
+	
+    uploadShoppingList(dtoIn) {
+		return new Promise( (resolve, reject) => {
+			resolve(Calls.call("post", this.getUri("shoppingList"), dtoIn));
+			reject("Error in Promise uploadShoppingList(), file: calls.js")
+		})
     },
 
     async updateShoppingItem(dtoIn) {
