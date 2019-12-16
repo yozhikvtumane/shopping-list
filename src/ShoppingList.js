@@ -83,8 +83,6 @@ class ShoppingList extends Component {
 			saved: false,
 
 		}
-		
-		console.log(this.state)
 	}
 	
 	componentWillMount() {
@@ -116,7 +114,7 @@ class ShoppingList extends Component {
 			return item
 		})
 		
-		this.setState( (state) => {
+		this.setState( () => {
 			return { items : [...listItems] }
 		})
 	}
@@ -129,7 +127,7 @@ class ShoppingList extends Component {
 			return item
 		})
 		
-		this.setState( (state) => {
+		this.setState( () => {
 			return { items : [...listItems] }
 		})
 	}
@@ -139,7 +137,7 @@ class ShoppingList extends Component {
 			return item.id !== id
 		})
 		
-		this.setState( (state) => {
+		this.setState( () => {
 			return { items : [...listItems] }
 		})
 	}
@@ -148,8 +146,6 @@ class ShoppingList extends Component {
 		let listItems = [...this.state.items]
 
 		let renderedItems = listItems.map( (item, i) => {
-			console.log("this.recieveAmount", this.recieveAmount)
-			
 			return (
 				<SingleItem
 					id={item.id}

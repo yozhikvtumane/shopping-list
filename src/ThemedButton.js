@@ -1,18 +1,6 @@
-import React, { Component, Fragment } from 'react'
-// import Button from '@atlaskit/button'
+import React from 'react'
 import Button from '@atlaskit/button';
-
-import { Checkbox } from '@atlaskit/checkbox'
-import merge from 'lodash.merge'
-import AddIcon from '@atlaskit/icon/glyph/add'
-import styled from 'styled-components'
-import EditorRemoveIcon from '@atlaskit/icon/glyph/editor/remove'
-import EditorEditIcon from '@atlaskit/icon/glyph/editor/edit'
 import { colors } from '@atlaskit/theme'
-// import appearance from '@atlaskit/theme'
-
-import Amounter from './Amounter'
-/*button colors #ff7c4a - delete, #c4ee87 - green */
 
 const newButtonStyles = {
 	warning: {
@@ -107,16 +95,18 @@ function extract(newTheme, appearance, state) {
 
 
 export default function(props) {
+	const { type, appearance, iconBefore, onClick, isDisabled, children } = props
+	
 	return (
 		<Button
-			type={props.type}
+			type={type}
 			theme={customButtonTheme}
-			appearance={props.appearance}
-			iconBefore={props.iconBefore}
-			onClick={props.onClick}
-			isDisabled={props.isDisabled}
+			appearance={appearance}
+			iconBefore={iconBefore}
+			onClick={onClick}
+			isDisabled={isDisabled}
 		>
-		{props.children ? props.children : null}
+			{children ? children : null}
 		</Button>
 	)
 }

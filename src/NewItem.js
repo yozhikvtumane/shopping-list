@@ -3,9 +3,7 @@
 	Amount and text are passed from child components - ItemText and AmountHandler
 */
 
-
-import React, { Component, Fragment } from 'react'
-import Button from '@atlaskit/button'
+import React, { Component } from 'react'
 import AddIcon from '@atlaskit/icon/glyph/add'
 import styled from 'styled-components'
 import ThemedButton from './ThemedButton'
@@ -19,12 +17,6 @@ const StyledFormWrapper = styled.div`
 	box-shadow: 0px 2px 2px 0px #efefef;
 `
 
-const StyledSubmitButton = styled(Button).attrs( props => ({
-	type: "submit"
-}))`
-	// margin-left: auto;
-	background-color: #333;
-`
 const StyledForm = styled.form.attrs(props => ({
 	onSubmit: props.onSubmit,
 }))`
@@ -96,16 +88,17 @@ class NewItem extends Component {
 	}
 	
 	render() {
+		const { textValue, amount } = this.state
 		return (
 			<StyledFormWrapper>
 				<StyledForm onSubmit={this.handleSubmit}>
-					<StyledTextInput value={this.state.textValue} onChange={this.handleTextChange}/>
-					<Amounter amountValue={this.state.amount} amountHandler={this.recieveAmount}/>
+					<StyledTextInput value={textValue} onChange={this.handleTextChange}/>
+					<Amounter amountValue={amount} amountHandler={this.recieveAmount}/>
 					<ThemedButton
 						type="submit"
 						iconBefore={<AddIcon />}
 						appearance="add"
-						isDisabled={this.state.textValue === "" ? true : false}
+						isDisabled={textValue === "" ? true : false}
 					>
 						Add Item
 					</ThemedButton>

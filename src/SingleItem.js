@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import EditorRemoveIcon from '@atlaskit/icon/glyph/editor/remove'
 import Amounter from './Amounter'
@@ -12,7 +12,6 @@ const StyledSingleItem = styled.div`
 	width: 100%;
 	padding: 0.5em 1em;
 	background-color: ${props => props.bgcGrey === "grey" ? "#fbfcfd;" : "#fff;"};
-		
 	border-bottom: 1px solid #eef0f5;
 `
 const StyledItemText = styled.span`
@@ -27,39 +26,37 @@ const StyledControlsWrapper = styled.div`
 	margin-left: auto;
 `
 
-class SingleItem extends Component {
-
-	constructor(props) {
-		super(props)
-		this.amountHandler = this.amountHandler.bind(this)
-		this.handleCheck = this.handleCheck.bind(this)
-		this.handleDelete = this.handleDelete.bind(this)
+export default function(props) {
+	const {bgcGrey, done, textValue, amountValue, id} = props
+	
+	const amountHandler = (newAmount) => {
+		props.amountHandler(id, newAmount)
 	}
 	
-	amountHandler(newAmount) {
-		this.props.amountHandler(this.props.id, newAmount)
+	const handleCheck = (e) => {
+		props.onDone(id, e.target.checked)
 	}
 	
-	handleCheck(e) {
-		this.props.onDone(this.props.id, e.target.checked)
+	const handleDelete = () => {
+		props.onDelete(id)
 	}
 	
-	handleDelete() {
-		this.props.onDelete(this.props.id)
-	}
-	
-	render() {
-		return(
-			<StyledSingleItem bgcGrey={this.props.bgcGrey} >
-				<ThemedCheckbox onChange={this.handleCheck} done={this.props.done}/>
-				<StyledItemText done={this.props.done}>{this.props.textValue}</StyledItemText>
-				<Amounter amountValue={this.props.amountValue} amountHandler={this.amountHandler}/>
-				<StyledControlsWrapper>
-					<ThemedButton iconBefore={<EditorRemoveIcon />} appearance="warning" onClick={this.handleDelete}/>
-				</StyledControlsWrapper>
-			</StyledSingleItem>			
-		)
-	}
+	return(
+		<StyledSingleItem bgcGrey={bgcGrey} >
+			<ThemedCheckbox
+				onChange={handleCheck}
+				done={done}/>
+			<StyledItemText done={done}>{textValue}</StyledItemText>
+			<Amounter
+				amountValue={amountValue}
+				amountHandler={amountHandler}/>
+			<StyledControlsWrapper>
+				<ThemedButton
+					iconBefore={<EditorRemoveIcon />}
+					appearance="warning"
+					onClick={handleDelete}
+				/>
+			</StyledControlsWrapper>
+		</StyledSingleItem>			
+	)
 }
-
-export default SingleItem

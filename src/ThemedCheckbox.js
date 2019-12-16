@@ -14,7 +14,9 @@ const customTheme = ((current, props) => {
 })
 
 export default function(props) {
+	const { onChange, done } = props
+	
 	return(
-		<Checkbox theme={customTheme} onChange={props.onChange} isChecked={props.done}/>
+		<Checkbox theme={customTheme} onChange={onChange} isChecked={done}/>
 	)
 }
