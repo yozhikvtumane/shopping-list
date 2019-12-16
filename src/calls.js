@@ -26,9 +26,11 @@ let Calls = {
         );
     },
 
-    async getShoppingList(dtoIn) {
-        let commandUri = this.getUri("shoppingList");
-        return await Calls.call("get", commandUri, dtoIn);
+    getShoppingList: function(dtoIn) {
+		return new Promise( (resolve, reject) => {
+			resolve(Calls.call("get", this.getUri("shoppingList"), dtoIn))
+			reject("Error in Promise getShoppingList(), file: calls.js")
+		})
     },
 
     async deleteShoppingItem(dtoIn) {

@@ -90,19 +90,29 @@ class ShoppingList extends Component {
 		}
 	}
 	// componentDidMount -> loaded true ? 
-	async componentDidMount() {
+	componentDidMount() {
 		// if (localStorage.items) {
 		// 	return this.setState( () => {
 		// 		return { items: JSON.parse(localStorage.items) }
 		// 	})
 		// }
-		try {
-			this.setState({isLoading: true})
-			let result = await Calls.getShoppingList()
-			this.setState({ items: [...result], isLoading: false})
-		} catch(err) {
-			this.setState({ error: err})
-		}
+		this.setState({isLoading: true})
+		Calls.getShoppingList()
+			.then( res => {
+				// console.log(res)
+				this.setState({items: [...res], isLoading: false})	
+			})
+			.catch( err => {
+				console.log(err)
+				this.setState({error: err})	
+			})
+		
+		// try {
+		// 	let result = await Calls.getShoppingList()
+		// 	this.setState({ items: [...result], isLoading: false})
+		// } catch(err) {
+		// 	this.setState({ error: err})
+		// }
 			
 		
 	}
