@@ -50,7 +50,7 @@ class NewItem extends Component {
 		this.handleSubmit = this.handleSubmit.bind(this)
 		
 		this.state = {
-				id: uniqueid('listItem_'),
+				id: uniqueid('listItem_' + Date.now().toString()),
 				amount: 1,
 				textValue: "",
 				done: false
@@ -80,7 +80,7 @@ class NewItem extends Component {
 			console.log('handleSubmit state', this.state)
 			this.props.onItemCreate(this.state)
 			this.setState({
-					id: uniqueid('listItem_'),
+					id: uniqueid('listItem_' + Date.now().toString()),
 					amount: 1,
 					textValue: ""
 				})

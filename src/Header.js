@@ -20,7 +20,7 @@ export default function(props) {
 	return (
 		<StyledHeader>
 			<h1>Shopping List</h1>
-			<SaveButton onClick={props.onSave}/>
+			<SaveButton onClick={props.onSave} showSpinner={props.showSpinner}/>
 		</StyledHeader>
 	)
 }

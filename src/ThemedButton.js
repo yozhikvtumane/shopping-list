@@ -65,7 +65,9 @@ const customButtonTheme = (currentTheme, themeProps) => {
 			...buttonStyles,
 			...extract(newButtonStyles, appearance, state)
 		},
-		spinnerStyles,
+		spinnerStyles: {
+			...spinnerStyles
+		}
 	}
 }
 
@@ -95,7 +97,7 @@ function extract(newTheme, appearance, state) {
 
 
 export default function(props) {
-	const { type, appearance, iconBefore, onClick, isDisabled, children } = props
+	const { type, appearance, iconBefore, onClick, isLoading, isDisabled, children } = props
 	
 	return (
 		<Button

@@ -27,7 +27,9 @@ const StyledControlsWrapper = styled.div`
 `
 
 export default function(props) {
+	console.log(props)
 	const {bgcGrey, done, textValue, amountValue, id} = props
+	console.log(id)
 	
 	const amountHandler = (newAmount) => {
 		props.amountHandler(id, newAmount)
@@ -42,7 +44,7 @@ export default function(props) {
 	}
 	
 	return(
-		<StyledSingleItem bgcGrey={bgcGrey} key={props.id}>
+		<StyledSingleItem bgcGrey={bgcGrey} key={id}>
 			<ThemedCheckbox
 				onChange={handleCheck}
 				done={done}/>
