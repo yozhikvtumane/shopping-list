@@ -6,17 +6,17 @@ import NewItem from './NewItem'
 import SingleItem from './SingleItem'
 import Calls from './calls'
 import Spinner from '@atlaskit/spinner'
-import Loading from './Loading'
 /* @Todo:
 	• Move header to standalone component
 	• Make amount counter as a standalone component with plus-minus buttons stateless
 	• Item Delete handler
 	• ThemedButton - move buttons to ThemedButton component, render depending on props
 	• ThemedCheckBox - move checkbox  to ThemedCheckbox component, render icon size dep. on props.
-	◘ Disable Amounter on item.done === true
+	• Localstorage handler
+	• Server saving handler
+	◘ Server worker on window close
+	◘ Server calls refactoring
 	◘ Move all styled-components code to StyledComponents component, import where necessery
-	◘ Localstorage handler
-	◘ Server saving handler
 */
 
 /*
@@ -216,8 +216,6 @@ class ShoppingList extends Component {
 		let listItems = [...this.state.items]
 
 		let renderedItems = listItems.map( (item, i) => {
-			console.log("item", item)
-			console.log("item.id", item.id)
 			return (
 				<SingleItem
 					id={item.id}
