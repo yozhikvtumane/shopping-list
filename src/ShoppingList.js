@@ -56,7 +56,7 @@ const GlobalStyle = createGlobalStyle`
 `
 
 const MainFrame = styled.div`
-	min-height: ${props => props.windowHeight}px;
+	min-height: ${props => props.windowHeight - props.headerHeight}px;
 	background-color: #fff;
 	border-top-left-radius: 4px;
 	border-top-right-radius: 4px;
@@ -80,12 +80,15 @@ class ShoppingList extends Component {
 		this.doneHandler = this.doneHandler.bind(this)
 		this.deleteHandler = this.deleteHandler.bind(this)
 		this.handleSave = this.handleSave.bind(this)
+		this.getHeaderHeight = this.getHeaderHeight.bind(this)
 
 		this.state = {
 			
 			styling: {
 				windowWidth: window.innerWidth,
-				windowHeight: window.innerHeight
+				windowHeight: window.innerHeight,
+				mainFrameHeight: null,
+				headerHeight: null
 			},
 			
 			items: [],
@@ -146,7 +149,15 @@ class ShoppingList extends Component {
 	componentDidUpdate() {
 		localStorage.setItem('items', JSON.stringify(this.state.items))
 	}
-
+	
+	getHeaderHeight(height) {
+		this.setState(state => {
+				return {styling: { ...this.state.styling, headerHeight: height}}
+			}
+		)
+		console.log('state', this.state)
+	}
+	
 	handleItemCreate(item) {
 		this.setState( () => {
 			return { items: [...this.state.items, item], saved: false }
@@ -231,13 +242,13 @@ class ShoppingList extends Component {
 		
 		
 		if (this.state.isLoading) {
-			MainFrameLoader =	<MainFrame windowHeight={this.state.styling.windowHeight} >
+			MainFrameLoader =	<MainFrame windowHeight={this.state.styling.windowHeight} headerHeight={this.state.styling.headerHeight}>
 									<StyledLoadingSpinner>
 										<Spinner size="large"/>
 									</StyledLoadingSpinner>
 								</MainFrame>
 		} else {
-			MainFrameLoader = 	<MainFrame windowHeight={this.state.styling.windowHeight} >
+			MainFrameLoader = 	<MainFrame windowHeight={this.state.styling.windowHeight} headerHeight={this.state.styling.headerHeight}>
 									<NewItem onItemCreate={this.handleItemCreate}/>
 									{this.renderItems()}
 								</MainFrame>
@@ -246,7 +257,11 @@ class ShoppingList extends Component {
 		return(
 			<Fragment>
 				<GlobalStyle />
-				<Header onSave={this.handleSave} showSpinner={this.state.showSpinner}/>
+				<Header 
+					onSave={this.handleSave}
+					showSpinner={this.state.showSpinner}
+					getHeaderHeight={this.getHeaderHeight}
+				/>
 				{MainFrameLoader}
 			</Fragment>
 			
