@@ -1,6 +1,11 @@
 import React, { Component, Fragment } from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
 
+/*------------------------------------------------------------------*/
+/* WORKBOX-WEBPACK-PLUGIN GENERATE-SW.JS CHANGED IN NODE MODULES!!!*/
+/*------------------------------------------------------------------*/
+
+
 import Header from './Header'
 import NewItem from './NewItem'
 import SingleItem from './SingleItem'
@@ -81,6 +86,7 @@ class ShoppingList extends Component {
 		this.deleteHandler = this.deleteHandler.bind(this)
 		this.handleSave = this.handleSave.bind(this)
 		this.getHeaderHeight = this.getHeaderHeight.bind(this)
+		this.handlePageUnload = this.handlePageUnload.bind(this)
 
 		this.state = {
 			
@@ -96,14 +102,15 @@ class ShoppingList extends Component {
 			isLoading: false,
 			showSpinner: false,
 			error: null
-
+			
 		}
 	}
 	componentDidMount() {
-
+		
 		/* WARNING: SPAGHETTI CODE AHEAD!*/
 		this.setState({isLoading: true})
 		
+		window.addEventListener('beforeunload', this.handlePageUnload)
 		/* If items array doesn't exist in localStorage, then create it and return */
 		if (localStorage.items === undefined) {
 			/*Probably there is need to be server call in case the cache was cleaned up*/
@@ -119,7 +126,7 @@ class ShoppingList extends Component {
 					})
 					.catch( err => {
 						console.dir(err)
-						this.setState({error: err.stack})
+						this.setState({error: err.stack, isLoading: false})
 					})
 		}
 		
@@ -132,7 +139,7 @@ class ShoppingList extends Component {
 							this.setState({items: [...res], isLoading: false})	
 						})
 						.catch( err => {
-							this.setState({error: err.stack})
+							this.setState({error: err.stack, isLoading: false})
 						})
 		} else {
 			/*If it's empty, try to fetch data from server*/
@@ -141,13 +148,31 @@ class ShoppingList extends Component {
 							this.setState({items: [...res], isLoading: false})	
 						})
 						.catch( err => {
-							this.setState({error: err.stack})	
+							this.setState({error: err.stack, isLoading: false})	
 						})
 		}
+		
+	}
+	
+	
+	componentWillUnmount() {
+		console.log('unmounting')
+		window.removeEventListener('beforeunload', this.handlePageUnload);
 	}
 	
 	componentDidUpdate() {
 		localStorage.setItem('items', JSON.stringify(this.state.items))
+	}
+	
+	handlePageUnload(e) {
+		// console.log()
+		console.log("unloadind", e)
+		let saveData = JSON.parse(localStorage.items)
+		navigator.serviceWorker.controller.postMessage({
+			type: 'save',
+			save: saveData,
+			slot: 1
+		  });
 	}
 	
 	getHeaderHeight(height) {
@@ -245,6 +270,11 @@ class ShoppingList extends Component {
 										<Spinner size="large"/>
 									</StyledLoadingSpinner>
 								</MainFrame>
+		} else if (this.state.error) {
+			MainFrameLoader =	<MainFrame windowHeight={this.state.styling.windowHeight} headerHeight={this.state.styling.headerHeight}>
+									<div>{this.state.error}</div>
+								</MainFrame>
+			
 		} else {
 			MainFrameLoader = 	<MainFrame windowHeight={this.state.styling.windowHeight} headerHeight={this.state.styling.headerHeight}>
 									<NewItem onItemCreate={this.handleItemCreate}/>

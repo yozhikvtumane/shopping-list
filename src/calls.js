@@ -22,7 +22,7 @@ let Calls = {
 
     getUri: function (useCase) {
         return (
-            "http://localhost:5000/" + useCase
+            "http://localhost:5050/" + useCase
         );
     },
 

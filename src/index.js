@@ -6,6 +6,7 @@ import 'normalize.css'
 // import './index.css';
 import ShoppingList from './ShoppingList'
 import * as serviceWorker from './serviceWorker'
+import * as workboxWindow from 'workbox-window'
 
 ReactDOM.render(<ShoppingList />, document.getElementById('root'))
 
