@@ -8,13 +8,13 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 const port = process.env.PORT || 5050;
 
-app.use(express.static(path.join(__dirname, 'build'), {maxAge: "30d"}));
+// app.use(express.static(path.join(__dirname, 'build'), {maxAge: "30d"}));
 
 
 app.use(function (req, res, next) {
 
   // Website you wish to allow to connect
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5000');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
 
   // Request methods you wish to allow
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -27,9 +27,9 @@ app.use(function (req, res, next) {
 });
 
 
-app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+// app.get('/', function(req, res) {
+//   res.sendFile(path.join(__dirname, 'build', 'index.html'));
+// });
 
 app.get("/shoppingList", (req, res) => {
   let response = getData();

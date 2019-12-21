@@ -1,16 +1,12 @@
 import React, { Component, Fragment } from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
 
-/*------------------------------------------------------------------*/
-/* WORKBOX-WEBPACK-PLUGIN GENERATE-SW.JS CHANGED IN NODE MODULES!!!*/
-/*------------------------------------------------------------------*/
-
-
 import Header from './Header'
 import NewItem from './NewItem'
 import SingleItem from './SingleItem'
 import Calls from './calls'
 import Spinner from '@atlaskit/spinner'
+
 /* @Todo:
 	• Move header to standalone component
 	• Make amount counter as a standalone component with plus-minus buttons stateless
@@ -136,6 +132,7 @@ class ShoppingList extends Component {
 			/*first, sync it with server data */
 			return Calls.getShoppingList()
 						.then( res => {
+							console.log('JSON.parse(localStorage.items).length !== 0')
 							this.setState({items: [...res], isLoading: false})	
 						})
 						.catch( err => {
