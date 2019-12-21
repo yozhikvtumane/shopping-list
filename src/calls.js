@@ -33,22 +33,12 @@ let Calls = {
 		})
     },
 	
-    async deleteShoppingItem(dtoIn) {
-		let commandUri = this.getUri("shoppingItem");
-        return await Calls.call("delete", commandUri, dtoIn);
-    },
-	
     uploadShoppingList(dtoIn) {
 		return new Promise( (resolve, reject) => {
 			resolve(Calls.call("post", this.getUri("shoppingList"), dtoIn));
 			reject("Error in Promise uploadShoppingList(), file: calls.js")
 		})
     },
-
-    async updateShoppingItem(dtoIn) {
-        let commandUri = this.getUri("shoppingItem");
-        return await Calls.call("put", commandUri, dtoIn);
-    }
 };
 
 export default Calls;
