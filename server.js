@@ -39,6 +39,7 @@ app.get("/shoppingList", (req, res) => {
 app.post("/shoppingList", (req, res) => {
   // let item = req.body;
   console.log("req", req.body)
+  console.log("res", res)
   saveData(req.body);
   sendDelayedResponse(res, req.body, 1);
 });
