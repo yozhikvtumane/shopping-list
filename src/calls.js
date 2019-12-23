@@ -3,21 +3,22 @@ let Calls = {
         return new Promise(resolve => setTimeout(resolve, ms));
     },
 
-    async call(method, url, dtoIn) {
+    call(method, url, dtoIn) {
         let body;
         if (dtoIn) {
             body = JSON.stringify(dtoIn);
         }
 
-        let response = await fetch(url, {
+        return fetch(url, {
             method: method,
             body: body,
             headers: {
                 "Content-Type": "application/json; charset=utf-8",
                 "Accept": "application/json"
             },
-        });
-        return await response.json();
+        }).then(response => response.json())
+        
+        // return await response.json();
     },
 
     getUri: function (useCase) {
