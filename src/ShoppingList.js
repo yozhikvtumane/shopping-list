@@ -257,9 +257,6 @@ class ShoppingList extends Component {
 
 	render() {
 		let MainFrameLoader;
-		// console.log("this.state.isLoading", this.state.isLoading)
-		
-		
 		
 		if (this.state.isLoading) {
 			MainFrameLoader =	<MainFrame windowHeight={this.state.styling.windowHeight} headerHeight={this.state.styling.headerHeight}>
