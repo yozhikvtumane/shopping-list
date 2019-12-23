@@ -8,7 +8,7 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 const port = process.env.PORT || 5050;
 
-// app.use(express.static(path.join(__dirname, 'build'), {maxAge: "30d"}));
+app.use(express.static(path.join(__dirname, 'build'), {maxAge: "30d"}));
 
 
 app.use(function (req, res, next) {
@@ -27,49 +27,42 @@ app.use(function (req, res, next) {
 });
 
 
-// app.get('/', function(req, res) {
-//   res.sendFile(path.join(__dirname, 'build', 'index.html'));
-// });
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 app.get("/shoppingList", (req, res) => {
   let response = getData();
   sendDelayedResponse(res, response, 1);
 });
 
-app.post("/shoppingList", (req, res) => {
-  // let item = req.body;
-  console.log("req", req.body)
-  // console.log("res", res)
-  saveData(req.body);
-  sendDelayedResponse(res, req.body, 1);
+
+app.post("/shoppingItem", (req, res) => {
+  let data = getData();
+  let item = req.body;
+  item.id = new Date().getTime();
+  data.push(item);
+  saveData(data);
+  sendDelayedResponse(res, item, 1);
 });
 
-// app.post("/shoppingItem", (req, res) => {
-//   let data = getData();
-//   let item = req.body;
-//   item.id = new Date().getTime();
-//   data.push(item);
-//   saveData(data);
-//   sendDelayedResponse(res, item, 1);
-// });
+app.put("/shoppingItem", (req, res) => {
+  let newItem = req.body;
+  let data = getData();
+  let index = data.findIndex(item => item.id === newItem.id);
+  data.splice(index, 1, newItem);
+  saveData(data);
+  sendDelayedResponse(res, newItem, 1);
+});
 
-// app.put("/shoppingItem", (req, res) => {
-//   let newItem = req.body;
-//   let data = getData();
-//   let index = data.findIndex(item => item.id === newItem.id);
-//   data.splice(index, 1, newItem);
-//   saveData(data);
-//   sendDelayedResponse(res, newItem, 1);
-// });
-
-// app.delete("/shoppingItem", (req, res) => {
-//   let newItem = req.body;
-//   let data = getData();
-//   let index = data.findIndex(item => item.id === newItem.id);
-//   data.splice(index, 1);
-//   saveData(data);
-//   sendDelayedResponse(res, newItem, 1);
-// });
+app.delete("/shoppingItem", (req, res) => {
+  let newItem = req.body;
+  let data = getData();
+  let index = data.findIndex(item => item.id === newItem.id);
+  data.splice(index, 1);
+  saveData(data);
+  sendDelayedResponse(res, newItem, 1);
+});
 
 
 function sendDelayedResponse(res, object, delay){
@@ -83,12 +76,10 @@ function getData(){
   return response;
 }
 function saveData(data){
-  fs.writeFile(
+  fs.writeFileSync(
       "./data/data.json",
-      JSON.stringify(data, null, 4), (err) => {
-        if (err) console.log(err)
-        console.log("Success!")
-      }
+      JSON.stringify(data, null, 2),
+      "utf-8"
   );
 }
 app.listen(port, () => console.log(`Listening on port ${port}`));
