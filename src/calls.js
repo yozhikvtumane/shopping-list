@@ -18,7 +18,6 @@ let Calls = {
             },
         }).then(response => response.json())
         
-        // return await response.json();
     },
 
     getUri: function (useCase) {
