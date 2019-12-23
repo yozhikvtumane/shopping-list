@@ -13,9 +13,7 @@ import Spinner from '@atlaskit/spinner'
 	• Item Delete handler
 	• ThemedButton - move buttons to ThemedButton component, render depending on props
 	• ThemedCheckBox - move checkbox  to ThemedCheckbox component, render icon size dep. on props.
-	• Localstorage handler
 	• Server saving handler
-	◘ Server worker on window close
 	◘ Server calls refactoring
 	◘ Move all styled-components code to StyledComponents component, import where necessery
 */
@@ -39,11 +37,24 @@ const GlobalStyle = createGlobalStyle`
 		background-color: #f0ebf8;
 		color: #333;
 	}
-
+	
 	#root {
 		width: 50%;
 		margin: 0 auto;
 	}
+	
+	@media (max-width: 1400px) {
+		#root {width: 70%;}	
+	}
+	
+	@media (max-width: 1100px) {
+		#root {width: 80%;}	
+	}
+		
+	@media (max-width: 640px) {
+		#root {width: 90%;}	
+	}
+	
 	
 	input.customNumberInput::-webkit-outer-spin-button,
 	input.customNumberInput::-webkit-inner-spin-button {
@@ -54,6 +65,7 @@ const GlobalStyle = createGlobalStyle`
 	input.customNumberInput {
 		-moz-appearance:textfield;
 	}
+	
 `
 
 const MainFrame = styled.div`
@@ -63,7 +75,7 @@ const MainFrame = styled.div`
 	border-top-right-radius: 4px;
 	box-shadow: rgba(0, 0, 0, 0.15) 0px 8px 16px 0px;
 `
-const StyledLoadingSpinner = styled.div`
+const StyledLoadingState = styled.div`
 	width: 100%;
 	text-align: center;
 	padding-top: 2em;
@@ -80,9 +92,7 @@ class ShoppingList extends Component {
 		this.recieveAmount = this.recieveAmount.bind(this)
 		this.doneHandler = this.doneHandler.bind(this)
 		this.deleteHandler = this.deleteHandler.bind(this)
-		this.handleSave = this.handleSave.bind(this)
 		this.getHeaderHeight = this.getHeaderHeight.bind(this)
-		this.handlePageUnload = this.handlePageUnload.bind(this)
 
 		this.state = {
 			
@@ -94,7 +104,6 @@ class ShoppingList extends Component {
 			},
 			
 			items: [],
-			saved: false,
 			isLoading: false,
 			showSpinner: false,
 			error: null
@@ -103,73 +112,9 @@ class ShoppingList extends Component {
 	}
 	componentDidMount() {
 		
-		/* WARNING: SPAGHETTI CODE AHEAD!*/
 		this.setState({isLoading: true})
+		this.setState({isLoading: false})
 		
-		window.addEventListener('beforeunload', this.handlePageUnload)
-		/* If items array doesn't exist in localStorage, then create it and return */
-		if (localStorage.items === undefined) {
-			/*Probably there is need to be server call in case the cache was cleaned up*/
-			return Calls.getShoppingList()
-					.then( res => {
-						console.log("localStorage.items === undefined, res.length", res.length)
-						if (res.length > 0) {
-							this.setState({items: [...res], isLoading: false})	
-						} else {
-							localStorage.setItem('items', "[]")
-							this.setState({isLoading: false})
-						}
-					})
-					.catch( err => {
-						console.dir(err)
-						this.setState({error: err.stack, isLoading: false})
-					})
-		}
-		
-		/*If items array is created in localStorage and is not empty*/
-		if (JSON.parse(localStorage.items).length !== 0) {
-			
-			/*first, sync it with server data */
-			return Calls.getShoppingList()
-						.then( res => {
-							console.log('JSON.parse(localStorage.items).length !== 0')
-							this.setState({items: [...res], isLoading: false})	
-						})
-						.catch( err => {
-							this.setState({error: err.stack, isLoading: false})
-						})
-		} else {
-			/*If it's empty, try to fetch data from server*/
-			return Calls.getShoppingList()	
-						.then( res => {
-							this.setState({items: [...res], isLoading: false})	
-						})
-						.catch( err => {
-							this.setState({error: err.stack, isLoading: false})	
-						})
-		}
-		
-	}
-	
-	
-	componentWillUnmount() {
-		console.log('unmounting')
-		window.removeEventListener('beforeunload', this.handlePageUnload);
-	}
-	
-	componentDidUpdate() {
-		localStorage.setItem('items', JSON.stringify(this.state.items))
-	}
-	
-	handlePageUnload(e) {
-		// console.log()
-		console.log("unloadind", e)
-		let saveData = JSON.parse(localStorage.items)
-		navigator.serviceWorker.controller.postMessage({
-			type: 'save',
-			save: saveData,
-			slot: 1
-		  });
 	}
 	
 	getHeaderHeight(height) {
@@ -177,67 +122,51 @@ class ShoppingList extends Component {
 				return {styling: { ...this.state.styling, headerHeight: height}}
 			}
 		)
-		console.log('state', this.state)
 	}
 	
 	handleItemCreate(item) {
 		this.setState( () => {
-			return { items: [...this.state.items, item], saved: false }
+			return { items: [...this.state.items, item] }
 		})
 	}
 
 	recieveAmount(id, num) {
 
-		let listItems = [...this.state.items].map(item => {
-			if (id === item.id) {
-				item.amount = num
-			}
+		const listItems = [...this.state.items].map(item => {
+			if (id === item.id) item.amount = num
+			
 			return item
 		})
 		
 		this.setState( () => {
-			return { items : [...listItems], saved: false }
+			return { items : [...listItems] }
 		})
 	}
 	
 	doneHandler(id, doneState) {
-		let listItems = [...this.state.items].map(item => {
-			if (id === item.id) {
-				item.done = doneState
-			}
+		const listItems = [...this.state.items].map(item => {
+			if (id === item.id) item.done = doneState
+			
 			return item
 		})
 		
 		this.setState( () => {
-			return { items : [...listItems], saved: false }
+			return { items : [...listItems] }
 		})
 	}
 	
 	deleteHandler(id) {
-		let listItems = [...this.state.items].filter(item => {
-			return item.id !== id
-		})
+		const listItems = [...this.state.items].filter(item => item.id !== id)
 		
 		this.setState( () => {
-			return { items : [...listItems], saved: false }
+			return { items : [...listItems] }
 		})
-	}
-	
-	handleSave() {
-		this.setState({showSpinner: true})
-		
-		Calls.uploadShoppingList(this.state.items)
-			.then(res => {
-				this.setState({showSpinner: false})
-				return res
-			
-			}).catch(err => err)
 	}
 	
 	renderItems() {
-		let listItems = [...this.state.items]
+		const listItems = [...this.state.items]
 
-		let renderedItems = listItems.map( (item, i) => {
+		const renderedItems = listItems.map( (item, i) => {
 			return (
 				<SingleItem
 					id={item.id}
@@ -257,23 +186,32 @@ class ShoppingList extends Component {
 
 	render() {
 		let MainFrameLoader;
+		const {isLoading, styling, showSpinner, error} = this.state;
 		
-		if (this.state.isLoading) {
-			MainFrameLoader =	<MainFrame windowHeight={this.state.styling.windowHeight} headerHeight={this.state.styling.headerHeight}>
-									<StyledLoadingSpinner>
-										<Spinner size="large"/>
-									</StyledLoadingSpinner>
-								</MainFrame>
-		} else if (this.state.error) {
-			MainFrameLoader =	<MainFrame windowHeight={this.state.styling.windowHeight} headerHeight={this.state.styling.headerHeight}>
-									<div>{this.state.error}</div>
-								</MainFrame>
+		if (isLoading) {
+			MainFrameLoader = (
+				<MainFrame windowHeight={styling.windowHeight} headerHeight={styling.headerHeight}>
+					<StyledLoadingState>
+						<Spinner size="large"/>
+					</StyledLoadingState>
+				</MainFrame>
+			)
+		} else if (error) {
+			MainFrameLoader = (
+				<MainFrame windowHeight={styling.windowHeight} headerHeight={styling.headerHeight}>
+					<StyledLoadingState>
+						<div>{error}</div>
+					</StyledLoadingState>
+				</MainFrame>
+			)
 			
 		} else {
-			MainFrameLoader = 	<MainFrame windowHeight={this.state.styling.windowHeight} headerHeight={this.state.styling.headerHeight}>
-									<NewItem onItemCreate={this.handleItemCreate}/>
-									{this.renderItems()}
-								</MainFrame>
+			MainFrameLoader = (
+				<MainFrame windowHeight={styling.windowHeight} headerHeight={styling.headerHeight}>
+					<NewItem onItemCreate={this.handleItemCreate}/>
+					{this.renderItems()}
+				</MainFrame>
+			)
 		} 
 				
 		return(
@@ -281,12 +219,11 @@ class ShoppingList extends Component {
 				<GlobalStyle />
 				<Header 
 					onSave={this.handleSave}
-					showSpinner={this.state.showSpinner}
+					showSpinner={showSpinner}
 					getHeaderHeight={this.getHeaderHeight}
 				/>
 				{MainFrameLoader}
 			</Fragment>
-			
 		)
 	}
 }
