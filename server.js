@@ -40,7 +40,6 @@ app.get("/shoppingList", (req, res) => {
 app.post("/shoppingItem", (req, res) => {
   let data = getData();
   let item = req.body;
-  item.id = new Date().getTime();
   data.push(item);
   saveData(data);
   sendDelayedResponse(res, item, 1);

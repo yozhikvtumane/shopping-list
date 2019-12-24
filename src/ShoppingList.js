@@ -16,6 +16,9 @@ import Spinner from '@atlaskit/spinner'
 	• Server saving handler
 	◘ Server calls refactoring
 	◘ Move all styled-components code to StyledComponents component, import where necessery
+	◘ add opacity to item on done
+	◘ disable buttons on done
+	◘ move calls to one method
 */
 
 /*
@@ -38,6 +41,16 @@ const GlobalStyle = createGlobalStyle`
 		color: #333;
 	}
 	
+	input.customNumberInput::-webkit-outer-spin-button,
+	input.customNumberInput::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+	
+	input.customNumberInput {
+		-moz-appearance:textfield;
+	}
+	
 	#root {
 		width: 50%;
 		margin: 0 auto;
@@ -53,17 +66,6 @@ const GlobalStyle = createGlobalStyle`
 		
 	@media (max-width: 640px) {
 		#root {width: 90%;}	
-	}
-	
-	
-	input.customNumberInput::-webkit-outer-spin-button,
-	input.customNumberInput::-webkit-inner-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-	}
-
-	input.customNumberInput {
-		-moz-appearance:textfield;
 	}
 	
 `
@@ -110,56 +112,100 @@ class ShoppingList extends Component {
 			
 		}
 	}
+	
+	
 	componentDidMount() {
 		
 		this.setState({isLoading: true})
-		this.setState({isLoading: false})
+		
+		Calls.getShoppingList()
+			.then(res => {
+				this.setState({items: res, isLoading: false})
+			})
+			.catch(err => {
+				this.setState( () => {
+					return {error: err.stack, isLoading: false}
+				})
+			})
 		
 	}
 	
 	getHeaderHeight(height) {
-		this.setState(state => {
-				return {styling: { ...this.state.styling, headerHeight: height}}
-			}
-		)
+		this.setState({ styling: { ...this.state.styling, headerHeight: height} })
 	}
 	
 	handleItemCreate(item) {
 		this.setState( () => {
-			return { items: [...this.state.items, item] }
+			return { showSpinner: true, items: [...this.state.items, item] }
 		})
+		
+		Calls.createShoppingItem(item)
+			.then(() => this.setState({showSpinner: false}))
+			.catch(err => {
+				this.setState(() => {
+					return {error: err.stack, showSpinner: false}
+				})
+			})
 	}
 
 	recieveAmount(id, num) {
-
+		let changedListItem
 		const listItems = [...this.state.items].map(item => {
-			if (id === item.id) item.amount = num
+			if (id === item.id) {
+				item.amount = num
+				changedListItem = item
+			}
 			
 			return item
 		})
 		
-		this.setState( () => {
-			return { items : [...listItems] }
-		})
+		this.setState({ 
+				items : [...listItems],
+				showSpinner: true
+			}, () => {
+				return Calls.updateShoppingItem(changedListItem)
+						.then( () => this.setState({showSpinner: false}))
+						.catch( (err) => this.setState({error: err.stack}))
+			})
 	}
 	
 	doneHandler(id, doneState) {
+		// console.log("listItem",listItem)
+		let changedListItem
 		const listItems = [...this.state.items].map(item => {
-			if (id === item.id) item.done = doneState
+			if (id === item.id) {
+				item.done = doneState
+				changedListItem = item
+			}
 			
 			return item
 		})
 		
-		this.setState( () => {
-			return { items : [...listItems] }
-		})
+		this.setState({ 
+				items : [...listItems],
+				showSpinner: true
+			}, () => {
+				return Calls.updateShoppingItem(changedListItem)
+						.then( () => this.setState({showSpinner: false}))
+						.catch( (err) => this.setState({error: err.stack}))
+			}
+		)
 	}
 	
 	deleteHandler(id) {
-		const listItems = [...this.state.items].filter(item => item.id !== id)
+		let itemTodelete
+		const listItems = [...this.state.items].filter(item => {
+			if (item.id !== id) itemTodelete = item
+			return item.id !== id
+		})
 		
-		this.setState( () => {
-			return { items : [...listItems] }
+		this.setState({ 
+			items : [...listItems],
+			showSpinner: true
+		}, () => {
+			return Calls.deleteShoppingItem(itemTodelete)
+					.then( () => this.setState({showSpinner: false}))
+					.catch( (err) => this.setState({error: err.stack}))
 		})
 	}
 	
@@ -218,7 +264,6 @@ class ShoppingList extends Component {
 			<Fragment>
 				<GlobalStyle />
 				<Header 
-					onSave={this.handleSave}
 					showSpinner={showSpinner}
 					getHeaderHeight={this.getHeaderHeight}
 				/>

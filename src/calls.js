@@ -9,14 +9,26 @@ let Calls = {
             body = JSON.stringify(dtoIn);
         }
 
-        return fetch(url, {
-            method: method,
-            body: body,
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-                "Accept": "application/json"
-            },
-        }).then(response => response.json())
+        return new Promise((resolve, reject) => {
+            fetch(url, {
+                method: method,
+                body: body,
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                    "Accept": "application/json"
+                },
+            })
+                .then(response => {
+                    console.log("calls.js response", response)
+                    
+                    resolve(response.json())
+                })
+                .catch(error => {
+                    console.log("calls.js error")
+                    console.dir(error)
+                    reject(error)
+                })
+        } )
         
     },
 
@@ -27,18 +39,21 @@ let Calls = {
     },
 
     getShoppingList(dtoIn) {
-		return new Promise( (resolve, reject) => {
-			resolve(Calls.call("get", this.getUri("shoppingList"), dtoIn))
-			reject("Error in Promise getShoppingList(), file: calls.js")
-		})
+        return Calls.call("get", this.getUri("shoppingList"), dtoIn)
     },
-	
-    uploadShoppingList(dtoIn) {
-		return new Promise( (resolve, reject) => {
-			resolve(Calls.call("post", this.getUri("shoppingList"), dtoIn));
-			reject("Error in Promise uploadShoppingList(), file: calls.js")
-		})
+
+    async deleteShoppingItem(dtoIn) {
+        let commandUri = this.getUri("shoppingItem");
+        return await Calls.call("delete", commandUri, dtoIn);
     },
+
+    createShoppingItem(dtoIn) {
+        return Calls.call("post", this.getUri("shoppingItem"), dtoIn)
+    },
+
+    updateShoppingItem(dtoIn) {
+        return Calls.call("put", this.getUri("shoppingItem"), dtoIn);
+    }
 };
 
 export default Calls;

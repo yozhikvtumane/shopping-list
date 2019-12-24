@@ -4,7 +4,7 @@
 
 import React from 'react'
 import styled from 'styled-components'
-import SaveButton from './SaveButton'
+import Spinner from '@atlaskit/spinner'
 
 const StyledHeader = styled.header.attrs(props => ({
 	
@@ -21,13 +21,10 @@ const StyledHeader = styled.header.attrs(props => ({
 export default class Header extends React.Component {
 	constructor(props) {
 		super(props)
-		console.log("header props", this.props)
 		this.headerRef = React.createRef()
 	}
 	
 	componentDidMount() {
-		console.log('ref', this.headerRef)
-		console.log('this.headerRef.current.clientHeight', this.headerRef.current.clientHeight)
 		this.props.getHeaderHeight(this.headerRef.current.clientHeight)
 	}
 	
@@ -35,7 +32,7 @@ export default class Header extends React.Component {
 		return (
 			<StyledHeader ref={this.headerRef}>
 				<h1>Shopping List</h1>
-				<SaveButton onClick={this.props.onSave} showSpinner={this.props.showSpinner}/>
+				<Spinner size="medium" isCompleting={!this.props.showSpinner}/>
 			</StyledHeader>
 		)
 	}
