@@ -16,7 +16,7 @@ import Spinner from '@atlaskit/spinner'
 	• Server saving handler
 	◘ Server calls refactoring
 	◘ Move all styled-components code to StyledComponents component, import where necessery
-	◘ add opacity to item on done
+	• Add opacity to item on done
 	◘ disable buttons on done
 	◘ move calls to one method
 */
@@ -174,6 +174,7 @@ class ShoppingList extends Component {
 		let changedListItem
 		const listItems = [...this.state.items].map(item => {
 			if (id === item.id) {
+				console.log(doneState)
 				item.done = doneState
 				changedListItem = item
 			}

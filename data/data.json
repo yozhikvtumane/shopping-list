@@ -3,7 +3,7 @@
     "id": "listItem_15772078241382",
     "amount": 18,
     "textValue": "asdasdasd",
-    "done": true
+    "done": false
   },
   {
     "id": "listItem_15772078358553",
@@ -19,32 +19,44 @@
   },
   {
     "id": "listItem_15772078417025",
-    "amount": 1,
+    "amount": 15,
     "textValue": "asd",
-    "done": true
+    "done": false
   },
   {
     "id": "listItem_15772078419236",
     "amount": 1,
     "textValue": "a",
-    "done": true
+    "done": false
   },
   {
     "id": "listItem_15772078421097",
     "amount": 7,
     "textValue": "sd",
-    "done": true
+    "done": false
   },
   {
     "id": "listItem_15772078422618",
     "amount": 1,
     "textValue": "as",
-    "done": true
+    "done": false
   },
   {
     "id": "listItem_15772078424139",
     "amount": 1,
     "textValue": "d",
+    "done": false
+  },
+  {
+    "id": "listItem_15772079881582",
+    "amount": 1,
+    "textValue": "11",
+    "done": false
+  },
+  {
+    "id": "listItem_15772080439573",
+    "amount": 9,
+    "textValue": "1",
     "done": false
   }
 ]

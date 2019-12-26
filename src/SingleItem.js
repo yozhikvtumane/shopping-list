@@ -11,7 +11,8 @@ const StyledSingleItem = styled.div`
 	
 	width: 100%;
 	padding: 0.5em 1em;
-	background-color: ${props => props.bgcGrey === "grey" ? "#fbfcfd;" : "#fff;"};
+	background-color: ${props => props.bgcGrey === "grey" ? "#fbfcfd" : "#fff"};
+	opacity: ${props => props.done ? "0.3" : "1"};
 	border-bottom: 1px solid #eef0f5;
 `
 const StyledItemText = styled.span`
@@ -42,7 +43,7 @@ export default function(props) {
 	}
 	
 	return(
-		<StyledSingleItem bgcGrey={bgcGrey} key={id}>
+		<StyledSingleItem bgcGrey={bgcGrey} key={id} done={done}>
 			<ThemedCheckbox
 				onChange={handleCheck}
 				done={done}/>
