@@ -17,7 +17,7 @@ import Spinner from '@atlaskit/spinner'
 	◘ Server calls refactoring
 	◘ Move all styled-components code to StyledComponents component, import where necessery
 	• Add opacity to item on done
-	◘ disable buttons on done
+	• disable buttons on done
 	◘ move calls to one method
 */
 
@@ -25,7 +25,7 @@ import Spinner from '@atlaskit/spinner'
 	Styling
 */
 
-/* Global styles for body */
+/* Global styles */
 
 const GlobalStyle = createGlobalStyle`
 	@import url('https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap');
@@ -170,11 +170,9 @@ class ShoppingList extends Component {
 	}
 	
 	doneHandler(id, doneState) {
-		// console.log("listItem",listItem)
 		let changedListItem
 		const listItems = [...this.state.items].map(item => {
 			if (id === item.id) {
-				console.log(doneState)
 				item.done = doneState
 				changedListItem = item
 			}
@@ -189,8 +187,8 @@ class ShoppingList extends Component {
 				return Calls.updateShoppingItem(changedListItem)
 						.then( () => this.setState({showSpinner: false}))
 						.catch( (err) => this.setState({error: err.stack}))
-			}
-		)
+				
+			})
 	}
 	
 	deleteHandler(id) {
@@ -232,11 +230,11 @@ class ShoppingList extends Component {
 	}
 
 	render() {
-		let MainFrameLoader;
-		const {isLoading, styling, showSpinner, error} = this.state;
+		let mainFrameLoader
+		const {isLoading, styling, showSpinner, error} = this.state
 		
 		if (isLoading) {
-			MainFrameLoader = (
+			mainFrameLoader = (
 				<MainFrame windowHeight={styling.windowHeight} headerHeight={styling.headerHeight}>
 					<StyledLoadingState>
 						<Spinner size="large"/>
@@ -244,7 +242,7 @@ class ShoppingList extends Component {
 				</MainFrame>
 			)
 		} else if (error) {
-			MainFrameLoader = (
+			mainFrameLoader = (
 				<MainFrame windowHeight={styling.windowHeight} headerHeight={styling.headerHeight}>
 					<StyledLoadingState>
 						<div>{error}</div>
@@ -253,7 +251,7 @@ class ShoppingList extends Component {
 			)
 			
 		} else {
-			MainFrameLoader = (
+			mainFrameLoader = (
 				<MainFrame windowHeight={styling.windowHeight} headerHeight={styling.headerHeight}>
 					<NewItem onItemCreate={this.handleItemCreate}/>
 					{this.renderItems()}
@@ -268,7 +266,7 @@ class ShoppingList extends Component {
 					showSpinner={showSpinner}
 					getHeaderHeight={this.getHeaderHeight}
 				/>
-				{MainFrameLoader}
+				{mainFrameLoader}
 			</Fragment>
 		)
 	}

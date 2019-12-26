@@ -50,7 +50,8 @@ export default function(props) {
 			<StyledItemText done={done}>{textValue}</StyledItemText>
 			<Amounter
 				amountValue={amountValue}
-				amountHandler={amountHandler}/>
+				amountHandler={amountHandler}
+				isDisabled={done}/>
 			<StyledControlsWrapper>
 				<ThemedButton
 					iconBefore={<EditorRemoveIcon />}

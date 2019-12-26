@@ -36,7 +36,6 @@ const newButtonStyles = {
 			disabled: "auto"
 		}
 	},
-	cloud: {},
 	plus: {
 		background: {
 			default: colors.T50,
