@@ -117,10 +117,13 @@ class ShoppingList extends Component {
 	componentDidMount() {
 		
 		this.setState({isLoading: true})
-		
+		console.log("logging from componentDidMount")
 		Calls.getShoppingList()
 			.then(res => {
-				this.setState({items: res, isLoading: false})
+				console.log("logging from componentDidMount shopping list get res")
+				this.setState( () => {
+					return {items: res, isLoading: false}
+				})
 			})
 			.catch(err => {
 				this.setState( () => {
@@ -140,7 +143,7 @@ class ShoppingList extends Component {
 		})
 		
 		Calls.createShoppingItem(item)
-			.then(() => this.setState({showSpinner: false}))
+			.then( () => this.setState({showSpinner: false}))
 			.catch(err => {
 				this.setState(() => {
 					return {error: err.stack, showSpinner: false}
@@ -165,12 +168,12 @@ class ShoppingList extends Component {
 			}, () => {
 				return Calls.updateShoppingItem(changedListItem)
 						.then( () => this.setState({showSpinner: false}))
-						.catch( (err) => this.setState({error: err.stack}))
+						.catch( (err) => this.setState({error: err.stack, showSpinner: false}))
 			})
 	}
 	
 	doneHandler(id, doneState) {
-		let changedListItem
+		let changedListItem;
 		const listItems = [...this.state.items].map(item => {
 			if (id === item.id) {
 				item.done = doneState
@@ -187,25 +190,26 @@ class ShoppingList extends Component {
 				return Calls.updateShoppingItem(changedListItem)
 						.then( () => this.setState({showSpinner: false}))
 						.catch( (err) => this.setState({error: err.stack}))
-				
-			})
+			}
+		)
 	}
 	
 	deleteHandler(id) {
-		let itemTodelete
+		let itemTodelete;
 		const listItems = [...this.state.items].filter(item => {
-			if (item.id !== id) itemTodelete = item
+			if (item.id == id) itemTodelete = item
 			return item.id !== id
 		})
-		
+		console.log("itemtodelete", itemTodelete)
+		console.log("listItems", listItems)
 		this.setState({ 
-			items : [...listItems],
-			showSpinner: true
-		}, () => {
-			return Calls.deleteShoppingItem(itemTodelete)
-					.then( () => this.setState({showSpinner: false}))
-					.catch( (err) => this.setState({error: err.stack}))
-		})
+				items : [...listItems],
+				showSpinner: true
+			}, () => {
+				return Calls.deleteShoppingItem(itemTodelete)
+						.then( () => this.setState({showSpinner: false}))
+						.catch( (err) => this.setState({error: err.stack}))
+			})
 	}
 	
 	renderItems() {
@@ -230,7 +234,7 @@ class ShoppingList extends Component {
 	}
 
 	render() {
-		let mainFrameLoader
+		let mainFrameLoader;
 		const {isLoading, styling, showSpinner, error} = this.state
 		
 		if (isLoading) {

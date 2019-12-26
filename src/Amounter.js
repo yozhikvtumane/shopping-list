@@ -13,7 +13,7 @@ import styled from 'styled-components'
 const StyledAmountInput = styled.input.attrs(props => ({
 	type: "number",
 	value: props.value,
-	className: "customNumberInput", // This classname is used in global styles to remove up-down arrows in input[type=number]
+	className: "customNumberInput", /* This classname is used in global styles to remove up-down arrows in input[type=number]*/
 }))`
 	width: 36px;
 	margin-right: 4px;
@@ -29,7 +29,9 @@ const StyledAmountInput = styled.input.attrs(props => ({
 export default function(props) {
 	const {isDisabled, amountValue, amountHandler} = props
 	
-	const amountPlus = () => amountHandler(amountValue + 1)
+	const amountPlus = () => {
+		return amountHandler(amountValue + 1)
+	}
 	
 	const amountMinus = () => {
 		if (amountValue > 0) return amountHandler(amountValue - 1)

@@ -8,7 +8,7 @@ let Calls = {
         if (dtoIn) {
             body = JSON.stringify(dtoIn);
         }
-
+        console.log("logging from calls")
         return new Promise((resolve, reject) => {
             fetch(url, {
                 method: method,
@@ -18,8 +18,9 @@ let Calls = {
                     "Accept": "application/json"
                 },
             })
-                .then(response => {
-                    console.log("calls.js response", response)
+            .then(response => {
+                console.log("calls.js response", response)
+                console.log("logging from calls")
                     
                     resolve(response.json())
                 })
@@ -42,9 +43,8 @@ let Calls = {
         return Calls.call("get", this.getUri("shoppingList"), dtoIn)
     },
 
-    async deleteShoppingItem(dtoIn) {
-        let commandUri = this.getUri("shoppingItem");
-        return await Calls.call("delete", commandUri, dtoIn);
+    deleteShoppingItem(dtoIn) {
+        return Calls.call("delete", this.getUri("shoppingItem"), dtoIn);
     },
 
     createShoppingItem(dtoIn) {

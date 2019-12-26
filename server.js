@@ -56,11 +56,15 @@ app.put("/shoppingItem", (req, res) => {
 
 app.delete("/shoppingItem", (req, res) => {
   let newItem = req.body;
+  console.log('newItem', newItem)
   let data = getData();
+  console.log("data", data)
   let index = data.findIndex(item => item.id === newItem.id);
-  data.splice(index, 1);
+  console.log('index', index)
+  data.splice(index, 1); 
   saveData(data);
   sendDelayedResponse(res, newItem, 1);
+  console.log("res after delete", res.send)
 });
 
 
