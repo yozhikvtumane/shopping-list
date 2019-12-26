@@ -1,22 +1,7 @@
-/*
-	Header component - wrapper for app's title and save button component
-*/
-
 import React from 'react'
-import styled from 'styled-components'
 import Spinner from '@atlaskit/spinner'
+import { StyledHeader } from "./StyledComponents"
 
-const StyledHeader = styled.header.attrs(props => ({
-	
-}))`
-	display: flex;
-	flex-wrap: no-wrap;
-	justify-content: space-between;
-	align-items: center;
-	
-	width: 100%;
-	padding-top: 2em;
-`
 
 export default class Header extends React.Component {
 	constructor(props) {

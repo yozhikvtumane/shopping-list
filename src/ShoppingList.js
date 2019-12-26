@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react'
-import styled, { createGlobalStyle } from 'styled-components'
 
 import Header from './Header'
 import NewItem from './NewItem'
 import SingleItem from './SingleItem'
 import Calls from './calls'
 import Spinner from '@atlaskit/spinner'
+import { GlobalStyle, MainFrame, StyledLoadingState} from './StyledComponents'
 
 /* @Todo:
 	• Move header to standalone component
@@ -14,75 +14,12 @@ import Spinner from '@atlaskit/spinner'
 	• ThemedButton - move buttons to ThemedButton component, render depending on props
 	• ThemedCheckBox - move checkbox  to ThemedCheckbox component, render icon size dep. on props.
 	• Server saving handler
-	◘ Server calls refactoring
-	◘ Move all styled-components code to StyledComponents component, import where necessery
+	• Server calls refactoring
+	• Move all styled-components code to StyledComponents component, import where necessery
 	• Add opacity to item on done
 	• disable buttons on done
 	◘ move calls to one method
 */
-
-/*
-	Styling
-*/
-
-/* Global styles */
-
-const GlobalStyle = createGlobalStyle`
-	@import url('https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap');
-
-	* {
-		box-sizing: border-box;
-		outline: none;
-	}
-
-	body {
-		font-family: 'Poppins', sans-serif;
-		background-color: #f0ebf8;
-		color: #333;
-	}
-	
-	input.customNumberInput::-webkit-outer-spin-button,
-	input.customNumberInput::-webkit-inner-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-	}
-	
-	input.customNumberInput {
-		-moz-appearance:textfield;
-	}
-	
-	#root {
-		width: 50%;
-		margin: 0 auto;
-	}
-	
-	@media (max-width: 1400px) {
-		#root {width: 70%;}	
-	}
-	
-	@media (max-width: 1100px) {
-		#root {width: 80%;}	
-	}
-		
-	@media (max-width: 640px) {
-		#root {width: 90%;}	
-	}
-	
-`
-
-const MainFrame = styled.div`
-	min-height: ${props => props.windowHeight - props.headerHeight}px;
-	background-color: #fff;
-	border-top-left-radius: 4px;
-	border-top-right-radius: 4px;
-	box-shadow: rgba(0, 0, 0, 0.15) 0px 8px 16px 0px;
-`
-const StyledLoadingState = styled.div`
-	width: 100%;
-	text-align: center;
-	padding-top: 2em;
-`
-
 /* Component declaration */
 
 class ShoppingList extends Component {
@@ -113,14 +50,11 @@ class ShoppingList extends Component {
 		}
 	}
 	
-	
 	componentDidMount() {
 		
 		this.setState({isLoading: true})
-		console.log("logging from componentDidMount")
 		Calls.getShoppingList()
 			.then(res => {
-				console.log("logging from componentDidMount shopping list get res")
 				this.setState( () => {
 					return {items: res, isLoading: false}
 				})
@@ -200,8 +134,7 @@ class ShoppingList extends Component {
 			if (item.id == id) itemTodelete = item
 			return item.id !== id
 		})
-		console.log("itemtodelete", itemTodelete)
-		console.log("listItems", listItems)
+		
 		this.setState({ 
 				items : [...listItems],
 				showSpinner: true
@@ -219,6 +152,7 @@ class ShoppingList extends Component {
 			return (
 				<SingleItem
 					id={item.id}
+					key={item.id}
 					amountValue={item.amount}
 					textValue={item.textValue}
 					onDone={this.doneHandler}
@@ -234,7 +168,7 @@ class ShoppingList extends Component {
 	}
 
 	render() {
-		let mainFrameLoader;
+		let mainFrameLoader
 		const {isLoading, styling, showSpinner, error} = this.state
 		
 		if (isLoading) {
