@@ -131,7 +131,7 @@ class ShoppingList extends Component {
 	deleteHandler(id) {
 		let itemTodelete;
 		const listItems = [...this.state.items].filter(item => {
-			if (item.id == id) itemTodelete = item
+			if (item.id === id) itemTodelete = item
 			return item.id !== id
 		})
 		

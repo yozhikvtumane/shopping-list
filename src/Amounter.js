@@ -26,7 +26,7 @@ export default function(props) {
 	return (
 		<Fragment>
 			<ThemedButton iconBefore={<EditorAddIcon />} onClick={amountPlus} isDisabled={isDisabled} appearance="plus"/>
-			<StyledAmountInput type="number"  value={amountValue} />
+			<StyledAmountInput type="number"  value={amountValue} readOnly/>
 			<ThemedButton iconBefore={ <EditorHorizontalRuleIcon/> } onClick={amountMinus} isDisabled={isDisabled} appearance="minus"/>
 		</Fragment>
 	)

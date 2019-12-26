@@ -8,7 +8,7 @@ let Calls = {
         if (dtoIn) {
             body = JSON.stringify(dtoIn);
         }
-        console.log("logging from calls")
+        
         return new Promise((resolve, reject) => {
             fetch(url, {
                 method: method,
@@ -19,14 +19,9 @@ let Calls = {
                 },
             })
             .then(response => {
-                console.log("calls.js response", response)
-                console.log("logging from calls")
-                    
                     resolve(response.json())
                 })
                 .catch(error => {
-                    console.log("calls.js error")
-                    console.dir(error)
                     reject(error)
                 })
         } )

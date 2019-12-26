@@ -28,9 +28,7 @@ class NewItem extends Component {
 	}
 	
 	handleTextChange(e) {
-		this.setState({
-			textValue: e.target.value
-		})
+		this.setState({textValue: e.target.value})
 	}
 	
 	handleSubmit(e) {
@@ -52,8 +50,8 @@ class NewItem extends Component {
 		return (
 			<StyledFormWrapper>
 				<StyledForm onSubmit={this.handleSubmit}>
-					<StyledTextInput value={textValue} onChange={this.handleTextChange}/>
-					<Amounter amountValue={amount} amountHandler={this.recieveAmount}/>
+					<StyledTextInput onChange={this.handleTextChange} value={textValue}/>
+					<Amounter amountHandler={this.recieveAmount} amountValue={amount}/>
 					<ThemedButton
 						type="submit"
 						iconBefore={<AddIcon />}

@@ -18,9 +18,7 @@ if ('function' === typeof importScripts) {
 	}
   }
   self.onmessage = function(event) {
-	  console.log(event)
 	if (event.data.type === 'save') {
-	  console.log("logging from serviceWorker:", event)
 	  return fetch('http://localhost:5050/shoppingList', {
 		method: "POST",
 		mode: 'no-cors',
@@ -32,5 +30,3 @@ if ('function' === typeof importScripts) {
 	  }).catch(err => console.log(err))
 	}
   };
-  console.log("self", self)
-//   console.log("calls", Calls)
