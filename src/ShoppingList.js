@@ -85,12 +85,11 @@ class ShoppingList extends Component {
 			return item
 		})
 		
-		this.setState({ 
-				items : [...listItems],
-				showSpinner: true
-			}, () => {
+		this.setState({
+			showSpinner: true
+		}, () => {
 				return Calls.updateShoppingItem(changedListItem)
-						.then( () => this.setState({showSpinner: false}))
+						.then( () => this.setState({items : [...listItems],showSpinner: false}))
 						.catch( (err) => this.setState({error: err.stack, showSpinner: false}))
 			})
 	}
