@@ -51,20 +51,13 @@ class ShoppingList extends Component {
 	}
 	
 	componentDidMount() {
-		
 		this.setState({isLoading: true})
-		Calls.getShoppingList()
-			.then(res => {
-				this.setState( () => {
-					return {items: res, isLoading: false}
-				})
-			})
-			.catch(err => {
-				this.setState( () => {
-					return {error: err.stack, isLoading: false}
-				})
-			})
 		
+		Calls.getShoppingList()
+			.then(res => this.setState( () => {
+					return {items: res, isLoading: false}
+			}))
+			.catch(err => this.setState({error: err.stack, isLoading: false}))
 	}
 	
 	getHeaderHeight(height) {
@@ -78,11 +71,7 @@ class ShoppingList extends Component {
 		
 		Calls.createShoppingItem(item)
 			.then( () => this.setState({showSpinner: false}))
-			.catch(err => {
-				this.setState(() => {
-					return {error: err.stack, showSpinner: false}
-				})
-			})
+			.catch(err => this.setState({error: err.stack, showSpinner: false}))
 	}
 
 	recieveAmount(id, num) {
@@ -107,7 +96,7 @@ class ShoppingList extends Component {
 	}
 	
 	doneHandler(id, doneState) {
-		let changedListItem;
+		let changedListItem
 		const listItems = [...this.state.items].map(item => {
 			if (id === item.id) {
 				item.done = doneState
@@ -129,7 +118,7 @@ class ShoppingList extends Component {
 	}
 	
 	deleteHandler(id) {
-		let itemTodelete;
+		let itemTodelete
 		const listItems = [...this.state.items].filter(item => {
 			if (item.id === id) itemTodelete = item
 			return item.id !== id

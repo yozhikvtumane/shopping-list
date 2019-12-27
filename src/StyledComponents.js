@@ -26,6 +26,7 @@ export const GlobalStyle = createGlobalStyle`
 	
 	#root {
 		width: 50%;
+		min-width: 410px;
 		margin: 0 auto;
 	}
 	
@@ -35,6 +36,9 @@ export const GlobalStyle = createGlobalStyle`
 	
 	@media (max-width: 1100px) {
 		#root {width: 80%;}	
+	}
+	@media (max-width: 860px) {
+		#root {width: 85%;}
 	}
 		
 	@media (max-width: 640px) {
@@ -55,9 +59,7 @@ export const StyledLoadingState = styled.div`
 	text-align: center;
 	padding-top: 2em;
 `
-export const StyledHeader = styled.header.attrs(props => ({
-	
-}))`
+export const StyledHeader = styled.header`
 	display: flex;
 	flex-wrap: no-wrap;
 	justify-content: space-between;
@@ -95,6 +97,9 @@ export const StyledTextInput = styled.input.attrs(props => (
 	font-weight: 300;
 	border: none;
 	border-bottom: 1px solid #f0ebf8;
+	@media (max-width: 1100px) {width: 40%;}
+	@media (max-width: 860px) {width: 35%;}
+	@media (max-width: 640px) {width: 30%;}
 `
 
 
@@ -106,7 +111,7 @@ export const StyledSingleItem = styled.div`
 	padding: 0.5em 1em;
 	background-color: ${props => props.bgcGrey === "grey" ? "#fbfcfd" : "#fff"};
 	opacity: ${props => props.done ? "0.3" : "1"};
-	border-bottom: 1px solid #eef0f5;
+	border-bottom: ${props => props.done ? "1px solid rgba(140, 143, 148, 0.55)" : "1px solid rgba(140, 143, 148, 0.15)"};
 `
 export const StyledItemText = styled.span`
 	width: 50%;
@@ -114,6 +119,9 @@ export const StyledItemText = styled.span`
 	overflow: hidden;
 	margin-right: 0.5em;
 	text-decoration: ${props => props.done ? "line-through" : "none"}
+	@media (max-width: 1100px) {width: 45%;}
+	@media (max-width: 860px) {width: 40%;}
+	@media (max-width: 640px) {width: 35%;}
 `
 
 export const StyledControlsWrapper = styled.div`
