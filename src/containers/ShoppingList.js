@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react'
 
-import Header from './Header'
-import NewItem from './NewItem'
-import SingleItem from './SingleItem'
+import Header from '../components/Header'
+import NewItem from '../components/NewItem'
+import SingleItem from '../components/SingleItem'
 import Spinner from '@atlaskit/spinner'
-import { GlobalStyle, MainFrame, StyledLoadingState} from './StyledComponents'
-import Calls from './calls'
+import { GlobalStyle, MainFrame, StyledLoadingState} from '../styles/StyledComponents'
+import Calls from '../utils/calls'
 
 /* Component declaration */
 

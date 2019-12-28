@@ -1,6 +1,6 @@
 import React from 'react'
 import Button from '@atlaskit/button'
-import { newButtonStyles } from './ThemedComponents'
+import { newButtonStyles } from '../styles/ThemedComponents'
 
 
 const customButtonTheme = (currentTheme, themeProps) => {

@@ -2,14 +2,7 @@ import React, { Fragment } from 'react'
 import EditorAddIcon from '@atlaskit/icon/glyph/editor/add'
 import EditorHorizontalRuleIcon from '@atlaskit/icon/glyph/editor/horizontal-rule'
 import ThemedButton from './ThemedButton'
-import { StyledAmountInput } from './StyledComponents'
-
-/* @TODO:
-	◘ condition less than 1
-	
-	◘ you should accept the current value as a prop, which lets the parent e.g. reset it to 0, just by updating its own state
-*/
-
+import { StyledAmountInput } from '../styles/StyledComponents'
 
 export default function(props) {
 	const {isDisabled, amountValue, amountHandler} = props

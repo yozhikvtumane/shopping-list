@@ -1,6 +1,6 @@
 import React from 'react'
 import Spinner from '@atlaskit/spinner'
-import { StyledHeader } from "./StyledComponents"
+import { StyledHeader } from "../styles/StyledComponents"
 
 
 export default class Header extends React.Component {

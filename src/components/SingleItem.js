@@ -3,7 +3,7 @@ import EditorRemoveIcon from '@atlaskit/icon/glyph/editor/remove'
 import Amounter from './Amounter'
 import ThemedButton from './ThemedButton'
 import ThemedCheckbox from './ThemedCheckbox'
-import { StyledSingleItem, StyledItemText, StyledControlsWrapper} from './StyledComponents'
+import { StyledSingleItem, StyledItemText, StyledControlsWrapper} from '../styles/StyledComponents'
 
 export default function(props) {
 	const {bgcGrey, done, textValue, amountValue, id} = props
