@@ -3,23 +3,10 @@ import React, { Component, Fragment } from 'react'
 import Header from './Header'
 import NewItem from './NewItem'
 import SingleItem from './SingleItem'
-import Calls from './calls'
 import Spinner from '@atlaskit/spinner'
 import { GlobalStyle, MainFrame, StyledLoadingState} from './StyledComponents'
+import Calls from './calls'
 
-/* @Todo:
-	• Move header to standalone component
-	• Make amount counter as a standalone component with plus-minus buttons stateless
-	• Item Delete handler
-	• ThemedButton - move buttons to ThemedButton component, render depending on props
-	• ThemedCheckBox - move checkbox  to ThemedCheckbox component, render icon size dep. on props.
-	• Server saving handler
-	• Server calls refactoring
-	• Move all styled-components code to StyledComponents component, import where necessery
-	• Add opacity to item on done
-	• disable buttons on done
-	◘ move calls to one method
-*/
 /* Component declaration */
 
 class ShoppingList extends Component {
@@ -65,72 +52,52 @@ class ShoppingList extends Component {
 	}
 	
 	handleItemCreate(item) {
-		this.setState( () => {
-			return { showSpinner: true, items: [...this.state.items, item] }
-		})
+		this.setState({ showSpinner: true})
 		
 		Calls.createShoppingItem(item)
-			.then( () => this.setState({showSpinner: false}))
+			.then( response => {
+				this.setState({ 
+					items: [...this.state.items, response],
+					showSpinner: false
+				})
+			})
 			.catch(err => this.setState({error: err.stack, showSpinner: false}))
 	}
 
-	recieveAmount(id, num) {
-		let changedListItem
-		const listItems = [...this.state.items].map(item => {
-			if (id === item.id) {
-				item.amount = num
-				changedListItem = item
-			}
-			
-			return item
+	recieveAmount(id, amount) {
+		this.setState({showSpinner: true}, () => {
+			Calls.updateShoppingItem(id, {amount})
+					.then( (response) => {
+						const items = [...this.state.items].map(item => (item.id === id ? { id, ...response } : item))
+						this.setState({ showSpinner: false, items })
+					
+					})
+					.catch( (err) => this.setState({error: err.stack}))
 		})
-		
-		this.setState({
-			showSpinner: true
-		}, () => {
-				return Calls.updateShoppingItem(changedListItem)
-						.then( () => this.setState({items : [...listItems],showSpinner: false}))
-						.catch( (err) => this.setState({error: err.stack, showSpinner: false}))
-			})
 	}
 	
-	doneHandler(id, doneState) {
-		let changedListItem
-		const listItems = [...this.state.items].map(item => {
-			if (id === item.id) {
-				item.done = doneState
-				changedListItem = item
-			}
-			
-			return item
-		})
-		
-		this.setState({ 
-				items : [...listItems],
-				showSpinner: true
-			}, () => {
-				return Calls.updateShoppingItem(changedListItem)
-						.then( () => this.setState({showSpinner: false}))
-						.catch( (err) => this.setState({error: err.stack}))
+	doneHandler(id, done) {
+		this.setState({showSpinner: true}, () => {
+			Calls.updateShoppingItem(id, {done})
+				.then( (response) => { 
+					const items = [...this.state.items].map(item => (item.id === id ? { id, ...response } : item))
+					this.setState({ showSpinner: false, items })
+				
+				})
+				.catch( (err) => this.setState({error: err.stack}))
 			}
 		)
 	}
 	
 	deleteHandler(id) {
-		let itemTodelete
-		const listItems = [...this.state.items].filter(item => {
-			if (item.id === id) itemTodelete = item
-			return item.id !== id
+		this.setState({showSpinner: true}, () => {
+			Calls.deleteShoppingItem({id})
+				.then( (response) => {
+					const items = this.state.items.filter(item => item.id !== response.id)
+					this.setState({ items, showSpinner: false })
+				})
+				.catch( (err) => this.setState({error: err.stack}))
 		})
-		
-		this.setState({ 
-				items : [...listItems],
-				showSpinner: true
-			}, () => {
-				return Calls.deleteShoppingItem(itemTodelete)
-						.then( () => this.setState({showSpinner: false}))
-						.catch( (err) => this.setState({error: err.stack}))
-			})
 	}
 	
 	renderItems() {

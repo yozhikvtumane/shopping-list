@@ -5,7 +5,6 @@ import ThemedButton from './ThemedButton'
 import ThemedCheckbox from './ThemedCheckbox'
 import { StyledSingleItem, StyledItemText, StyledControlsWrapper} from './StyledComponents'
 
-
 export default function(props) {
 	const {bgcGrey, done, textValue, amountValue, id} = props
 	

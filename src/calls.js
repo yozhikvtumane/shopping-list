@@ -1,54 +1,33 @@
-let Calls = {
-    sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    },
+const call = (method, url, data) => {
+	const body = JSON.stringify(data)
+	
+	const response = new Promise((resolve, reject) => {
+		fetch(url, {
+			method,
+			body,
+			headers: {
+				'Content-Type': 'application/json; charset=utf-8',
+				'Accept': 'application/json'
+			}
+		})
+		.then( response => resolve(response.json()) )
+		.catch( error => reject(error) )
+	})
+	
+	return response
+}
 
-    call(method, url, dtoIn) {
-        let body;
-        if (dtoIn) {
-            body = JSON.stringify(dtoIn);
-        }
-        
-        return new Promise((resolve, reject) => {
-            fetch(url, {
-                method: method,
-                body: body,
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                    "Accept": "application/json"
-                },
-            })
-            .then(response => {
-                    resolve(response.json())
-                })
-                .catch(error => {
-                    reject(error)
-                })
-        } )
-        
-    },
+const host = 'http://localhost:5050'
+const getUri = useCase => `${host}/${useCase}`
+const getShoppingList = data => call('get', getUri('shoppingList/item'))
+const createShoppingItem = data => call('post', getUri('shoppingList/item'), data)
+const updateShoppingItem = (id, data) => call('put', getUri(`shoppingList/item/${id}`), data)
+const deleteShoppingItem = data => call('delete', getUri(`shoppingList/item/${data.id}`))
 
-    getUri: function (useCase) {
-        return (
-            "http://localhost:5050/" + useCase
-        );
-    },
-
-    getShoppingList(dtoIn) {
-        return Calls.call("get", this.getUri("shoppingList"), dtoIn)
-    },
-
-    deleteShoppingItem(dtoIn) {
-        return Calls.call("delete", this.getUri("shoppingItem"), dtoIn);
-    },
-
-    createShoppingItem(dtoIn) {
-        return Calls.call("post", this.getUri("shoppingItem"), dtoIn)
-    },
-
-    updateShoppingItem(dtoIn) {
-        return Calls.call("put", this.getUri("shoppingItem"), dtoIn);
-    }
-};
-
-export default Calls;
+export default {
+	call,
+	getShoppingList,
+	deleteShoppingItem,
+	createShoppingItem,
+	updateShoppingItem
+}

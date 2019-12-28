@@ -14,7 +14,6 @@ class NewItem extends Component {
 		this.handleSubmit = this.handleSubmit.bind(this)
 		
 		this.state = {
-				id: 'listItem_' + Date.now().toString(),
 				amount: 1,
 				textValue: "",
 				done: false
@@ -38,7 +37,6 @@ class NewItem extends Component {
 		if (typeof this.props.onItemCreate === 'function') {
 			this.props.onItemCreate(this.state)
 			this.setState({
-					id: 'listItem_' + Date.now().toString(),
 					amount: 1,
 					textValue: ""
 				})
