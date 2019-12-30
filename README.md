@@ -3,7 +3,7 @@
 Built using `create-react-app` with the help of `@atlaskit`, `styled-components`, `lodash`.
 
 ## Installing
-
+`git clone`  
 `npm install`
 
 ## running
