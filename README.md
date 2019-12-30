@@ -8,7 +8,7 @@ Built using `create-react-app` with the help of `@atlaskit`, `styled-components`
 
 ## running
 
-Client - `npm start`
+Client - `npm start`  
 Server - `npm run start server`
 
 ## Main features:
