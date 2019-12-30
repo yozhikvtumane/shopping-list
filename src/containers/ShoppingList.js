@@ -56,7 +56,7 @@ class ShoppingList extends Component {
 					showSpinner: false
 				})
 			})
-			.catch(err => this.setState({error: err.stack, showSpinner: false}))
+			.catch((err) => this.setState({error: err.stack, showSpinner: false}))
 	}
 
 	recieveAmount(id, amount) {

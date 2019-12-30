@@ -13,8 +13,6 @@ app.use(express.static(path.join(__dirname, 'build'), {maxAge: "30d"}));
 
 app.use(function (req, res, next) {
 
-  
-  // Website you wish to allow to connect
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
 
   // Request methods you wish to allow
@@ -63,9 +61,11 @@ app.post("/shoppingList/item", (req, res) => {
 app.put("/shoppingList/item/:id", (req, res) => {
   let data = getData();
   let id = req.params.id
+  
   if (data[id] === undefined) {
     return res.status(404).send({ message: `Missing item with id: ${id}` })
   }
+  
   const { id: newId, ...newItem } = req.body
   
   if (newId && id !== newId) {
