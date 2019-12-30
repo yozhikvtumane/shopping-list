@@ -4,7 +4,6 @@ import ThemedButton from './ThemedButton'
 import Amounter from "./Amounter"
 import { StyledTextInput, StyledForm, StyledFormWrapper } from "../styles/StyledComponents";
 
-
 class NewItem extends Component {
 	constructor(props) {
 		super(props)

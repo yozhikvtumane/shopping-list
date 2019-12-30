@@ -9,9 +9,7 @@ export default function(props) {
 	const {bgcGrey, done, textValue, amountValue, id} = props
 	
 	const amountHandler = (newAmount) => props.amountHandler(id, newAmount)
-	
 	const handleCheck = (e) => props.onDone(id, e.target.checked)
-	
 	const handleDelete = () => props.onDelete(id)
 	
 	return(
@@ -31,6 +29,6 @@ export default function(props) {
 					onClick={handleDelete}
 				/>
 			</StyledControlsWrapper>
-		</StyledSingleItem>			
+		</StyledSingleItem>
 	)
 }

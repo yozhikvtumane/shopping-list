@@ -2,7 +2,6 @@ import React from 'react'
 import Button from '@atlaskit/button'
 import { newButtonStyles } from '../styles/ThemedComponents'
 
-
 const customButtonTheme = (currentTheme, themeProps) => {
 	let {appearance, state} = themeProps
 	const { buttonStyles, spinnerStyles } = currentTheme(themeProps);
@@ -17,7 +16,6 @@ const customButtonTheme = (currentTheme, themeProps) => {
 		}
 	}
 }
-
 
 function extract(newTheme, appearance, state) {
 	if (!newTheme[appearance]) return
@@ -41,7 +39,6 @@ function extract(newTheme, appearance, state) {
 		return acc
 	}, {})
   }
-
 
 export default function(props) {
 	const { type, appearance, iconBefore, onClick, isDisabled, children } = props

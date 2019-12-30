@@ -1,13 +1,10 @@
 import React, { Component, Fragment } from 'react'
-
 import Header from '../components/Header'
 import NewItem from '../components/NewItem'
 import SingleItem from '../components/SingleItem'
 import Spinner from '@atlaskit/spinner'
 import { GlobalStyle, MainFrame, StyledLoadingState} from '../styles/StyledComponents'
 import Calls from '../utils/calls'
-
-/* Component declaration */
 
 class ShoppingList extends Component {
 	constructor() {
@@ -41,10 +38,8 @@ class ShoppingList extends Component {
 		this.setState({isLoading: true})
 		
 		Calls.getShoppingList()
-			.then(res => this.setState( () => {
-					return {items: res, isLoading: false}
-			}))
-			.catch(err => this.setState({error: err.stack, isLoading: false}))
+			.then( (res) => this.setState({items: res, isLoading: false}) )
+			.catch( (err) => this.setState({error: err.stack, isLoading: false}) )
 	}
 	
 	getHeaderHeight(height) {
@@ -55,7 +50,7 @@ class ShoppingList extends Component {
 		this.setState({ showSpinner: true})
 		
 		Calls.createShoppingItem(item)
-			.then( response => {
+			.then( (response) => {
 				this.setState({ 
 					items: [...this.state.items, response],
 					showSpinner: false
