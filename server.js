@@ -8,12 +8,12 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 const port = process.env.PORT || 5050;
 
-app.use(express.static(path.join(__dirname, 'build'), {maxAge: "30d"}));
+// app.use(express.static(path.join(__dirname, 'build'), {maxAge: "30d"}));
 
 
 app.use(function (req, res, next) {
 
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5000');
 
   // Request methods you wish to allow
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -26,17 +26,14 @@ app.use(function (req, res, next) {
 });
 
 
-app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+// app.get('/', function(req, res) {
+//   res.sendFile(path.join(__dirname, 'build', 'index.html'));
+// });
 
 app.get('/shoppinglist/item', (req, res) => {
-  const data = getData()
-  sendDelayedResponse(
-    res,
-    Object.keys(data).map(id => ({ id, ...data[id] })),
-    1
-  )
+  const data = getData();
+  const sendData = Object.keys(data).map(id => ({ id, ...data[id] }));
+  res.send(sendData);
 })
 
 app.get('/shoppinglist/item/:id', (req, res) => {
@@ -47,7 +44,7 @@ app.get('/shoppinglist/item/:id', (req, res) => {
     return res.status(404).send({ message: `Missing item with id: ${id}` })
   }
   
-  sendDelayedResponse(res, { id, ...data[id] }, 1)
+  res.send({ id, ...data[id] })
 })
 
 app.post("/shoppingList/item", (req, res) => {
@@ -55,18 +52,18 @@ app.post("/shoppingList/item", (req, res) => {
   const id = `listItem_${new Date().getTime()}`;
   data[id] = req.body;
   saveData(data);
-  sendDelayedResponse(res, {id, ...data[id]}, 1);
+  res.send({id, ...data[id]});
 });
 
 app.put("/shoppingList/item/:id", (req, res) => {
   let data = getData();
-  let id = req.params.id
+  let id = req.params.id;
   
   if (data[id] === undefined) {
     return res.status(404).send({ message: `Missing item with id: ${id}` })
   }
   
-  const { id: newId, ...newItem } = req.body
+  const { id: newId, ...newItem } = req.body;
   
   if (newId && id !== newId) {
     console.warn(`Different item's ID provided '${id}' and '${newId}'`)
@@ -74,28 +71,21 @@ app.put("/shoppingList/item/:id", (req, res) => {
   
   data[id] = { ...data[id], ...newItem }
   saveData(data);
-  sendDelayedResponse(res, { ...data[id], id}, 1);
+  res.send({ ...data[id], id});
 });
 
 app.delete("/shoppingList/item/:id", (req, res) => {
   let data = getData();
-  let id = req.params.id
+  let id = req.params.id;
   
   if (data[id] === undefined) {
-    return res.status(404).send({ message: `Missing item with id: ${id}` })
+    return res.status(404).send({ message: `Missing item with id: ${id}` });
   }
   
-  const { [id]: value, ...otherData } = data
-  saveData(otherData)
-  sendDelayedResponse(res, { id, ...value }, 1)
+  const { [id]: value, ...otherData } = data;
+  saveData(otherData);
+  res.send({ id, ...value });
 });
-
-
-function sendDelayedResponse(res, object, delay){
-  setTimeout(function() {
-    res.send(object);
-  }, delay*1000);
-}
 
 function getData(){
   let text = fs.readFileSync('./data/data.json','utf8');
